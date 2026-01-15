@@ -23,9 +23,7 @@
                             900: 'var(--bg-main)',
                         }
                     },
-                    screens: {
-                        'xs': '400px',
-                    }
+                    screens: { 'xs': '400px' }
                 }
             }
         }
@@ -52,7 +50,6 @@
             transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
         }
 
-        /* Canvas de Efeitos */
         #effects-canvas {
             position: fixed;
             top: 0;
@@ -63,24 +60,18 @@
             z-index: 0;
         }
 
-        .relative-content {
-            position: relative;
-            z-index: 1;
-        }
+        .relative-content { position: relative; z-index: 1; }
 
-        /* Banner ajustado para mostrar TUDO no mobile sem cortes */
         .banner-aspect {
             width: 100%;
             height: auto;
             display: block;
-            aspect-ratio: 1920 / 340; /* Mantém a proporção real para não cortar nada */
-            object-fit: contain; /* Garante que a imagem inteira apareça */
+            aspect-ratio: 1920 / 340;
+            object-fit: contain;
             background-color: var(--bg-main);
         }
 
-        .panel-transition {
-            transition: transform 0.3s ease-in-out;
-        }
+        .panel-transition { transition: transform 0.3s ease-in-out; }
 
         .glass-nav {
             background: rgba(var(--nav-bg-rgb, 17, 17, 17), 0.85);
@@ -88,7 +79,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Ajuste da Decoração do Card */
         .product-card::after {
             content: var(--theme-decoration);
             position: absolute;
@@ -100,11 +90,10 @@
             opacity: 0.5;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        @media (min-width: 768px) {
-            .product-card::after { font-size: 1.8rem; bottom: 15px; right: 15px; }
-        }
+        @media (min-width: 768px) { .product-card::after { font-size: 1.8rem; bottom: 15px; right: 15px; } }
 
-        /* Carousel */
+        .product-card:hover .product-actions { opacity: 1; }
+
         .carousel-container {
             display: flex;
             overflow-x: auto;
@@ -114,13 +103,8 @@
             scrollbar-width: none;
         }
         .carousel-container::-webkit-scrollbar { display: none; }
-        .carousel-item {
-            flex: 0 0 100%;
-            scroll-snap-align: start;
-            position: relative;
-        }
+        .carousel-item { flex: 0 0 100%; scroll-snap-align: start; position: relative; }
 
-        /* News Ticker */
         .ticker-wrapper {
             background: var(--brand-500);
             color: var(--text-on-brand);
@@ -133,18 +117,9 @@
             letter-spacing: 0.05em;
             z-index: 50;
         }
-        @media (min-width: 768px) {
-            .ticker-wrapper { font-size: 0.75rem; padding: 8px 0; }
-        }
-        .ticker-content {
-            display: inline-block;
-            animation: ticker 25s linear infinite;
-            padding-left: 100%;
-        }
-        @keyframes ticker {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
-        }
+        @media (min-width: 768px) { .ticker-wrapper { font-size: 0.75rem; padding: 8px 0; } }
+        .ticker-content { display: inline-block; animation: ticker 25s linear infinite; padding-left: 100%; }
+        @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
         .whatsapp-float {
             position: fixed;
@@ -162,29 +137,24 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             z-index: 100;
         }
-        @media (min-width: 768px) {
-            .whatsapp-float { width: 60px; height: 60px; font-size: 30px; bottom: 30px; left: 30px; }
-        }
+        @media (min-width: 768px) { .whatsapp-float { width: 60px; height: 60px; font-size: 30px; bottom: 30px; left: 30px; } }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Grid de produtos mobile: 2 colunas organizadas */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
-        @media (min-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 24px;
-            }
+        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+        @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(var(--brand-rgb), 0.1);
+            transition: transform 0.3s ease;
         }
-        @media (min-width: 1024px) {
-            .products-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
+        .testimonial-card:hover { transform: translateY(-5px); }
     </style>
 </head>
 <body class="text-brand-400">
@@ -193,10 +163,10 @@
 
     <div class="relative-content">
         <div class="ticker-wrapper">
-            <div id="site-ticker" class="ticker-content">Carregando novidades da vitrine...</div>
+            <div id="site-ticker" class="ticker-content">Carregando novidades...</div>
         </div>
 
-        <div id="toast" class="fixed bottom-5 right-5 z-[110] transform translate-y-20 opacity-0 transition-all duration-300 bg-brand-500 text-black font-bold px-6 py-3 rounded-lg shadow-xl shadow-brand-500/20 text-sm md:text-base"></div>
+        <div id="toast" class="fixed bottom-5 right-5 z-[110] transform translate-y-20 opacity-0 transition-all duration-300 bg-brand-500 text-black font-bold px-6 py-3 rounded-lg shadow-xl text-sm"></div>
 
         <a id="whatsapp-floating-btn" href="#" target="_blank" class="whatsapp-float hover:scale-110 transition-transform">
             <i class="fab fa-whatsapp"></i>
@@ -206,7 +176,6 @@
             <div class="max-w-7xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
                 <div class="flex items-center gap-2 md:gap-4 overflow-hidden">
                     <img id="logo-nav" src="https://i.ibb.co/zVr3Fk0c/logo.png" alt="Logo" class="h-8 md:h-14 w-auto flex-shrink-0">
-                    <!-- Título agora visível em todas as telas com ajuste de tamanho -->
                     <h1 id="store-name-nav" class="text-xs xs:text-sm md:text-xl font-bold tracking-tighter uppercase truncate text-brand-500">Loja do Corvo</h1>
                 </div>
                 
@@ -245,12 +214,17 @@
             </div>
         </section>
 
-        <main id="store-content" class="max-w-7xl mx-auto px-3 md:px-4 pb-20 min-h-[300px]">
-            <div class="flex flex-col items-center justify-center py-16 text-brand-600/50">
-                <i class="fas fa-circle-notch fa-spin text-2xl md:text-3xl mb-4"></i>
-                <p class="text-xs md:text-sm">Preparando vitrine...</p>
-            </div>
+        <main id="store-content" class="max-w-7xl mx-auto px-3 md:px-4 pb-12 min-h-[300px]">
+            <!-- Conteúdo Dinâmico -->
         </main>
+
+        <!-- Seção de Depoimentos (Prova Social) -->
+        <section id="testimonials-section" class="max-w-7xl mx-auto px-4 py-12 border-t border-brand-600/10 hidden">
+            <h2 class="text-2xl md:text-3xl font-black text-brand-500 uppercase tracking-tighter mb-10 text-center">Quem já usa a nossa marca</h2>
+            <div id="testimonials-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Depoimentos renderizados aqui -->
+            </div>
+        </section>
 
         <footer class="bg-black py-10 md:py-16 border-t border-brand-600/20 relative z-10">
             <div class="max-w-7xl mx-auto px-4">
@@ -269,7 +243,7 @@
                     </div>
                     <div class="space-y-3 md:space-y-4">
                         <h4 class="text-brand-500 font-bold uppercase text-[10px] md:text-sm tracking-widest">Contato</h4>
-                        <p id="footer-phone-display" class="text-brand-400 font-bold text-sm md:text-lg">(41) 99976-7744</p>
+                        <p id="footer-phone-display" class="text-brand-400 font-bold text-sm md:text-lg"></p>
                         <div class="flex justify-center md:justify-start gap-4 text-base md:text-xl">
                             <a href="#" class="text-brand-600 hover:text-brand-400"><i class="fab fa-instagram"></i></a>
                             <a id="footer-whatsapp-icon" href="#" target="_blank" class="text-brand-600 hover:text-brand-400"><i class="fab fa-whatsapp"></i></a>
@@ -277,7 +251,7 @@
                     </div>
                 </div>
                 <div class="pt-6 border-t border-brand-600/10 text-center">
-                    <p id="footer-copyright" class="text-brand-600/50 text-[9px] md:text-xs">© 2024 Loja do Corvo. Direitos reservados.</p>
+                    <p id="footer-copyright" class="text-brand-600/50 text-[9px] md:text-xs"></p>
                 </div>
             </div>
         </footer>
@@ -287,96 +261,111 @@
     <div id="cart-overlay" class="fixed inset-0 bg-black/80 z-50 hidden transition-opacity" onclick="toggleCart()"></div>
     <div id="cart-panel" class="fixed top-0 right-0 w-[85%] md:w-full md:max-w-md h-full bg-ui-900 shadow-2xl z-[60] panel-transition translate-x-full flex flex-col border-l border-brand-600/30">
         <div class="flex justify-between items-center p-4 md:p-6 border-b border-brand-600/20">
-            <h2 class="text-lg md:text-2xl font-bold text-brand-500">Sua Sacola</h2>
+            <h2 class="text-lg md:text-2xl font-bold text-brand-500 uppercase tracking-widest">Sacola</h2>
             <button onclick="toggleCart()" class="text-brand-400"><i class="fas fa-times text-lg md:text-2xl"></i></button>
         </div>
         <div id="cart-items" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6"></div>
         <div class="p-4 md:p-6 border-t border-brand-600/20 bg-ui-800">
-            <div class="flex justify-between items-center mb-4 md:mb-6">
-                <span class="text-brand-400 text-xs md:text-sm">Total:</span>
-                <span id="cart-total" class="text-lg md:text-2xl font-bold text-brand-500">R$ 0,00</span>
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-brand-400 text-xs uppercase">Total Estimado</span>
+                <span id="cart-total" class="text-lg md:text-2xl font-black text-brand-500">R$ 0,00</span>
             </div>
-            <button onclick="checkoutWhatsApp()" class="w-full bg-brand-500 text-black py-3 md:py-4 rounded-xl font-bold text-xs md:text-base flex items-center justify-center gap-2 shadow-lg">
-                <i class="fab fa-whatsapp text-base md:text-lg"></i> FECHAR NO WHATSAPP
+            <button onclick="checkoutWhatsApp()" class="w-full bg-brand-500 text-black py-3 md:py-4 rounded-xl font-bold text-xs md:text-sm flex items-center justify-center gap-2">
+                <i class="fab fa-whatsapp text-base"></i> FECHAR NO WHATSAPP
             </button>
-        </div>
-    </div>
-
-    <!-- Login Modal -->
-    <div id="login-modal" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-4">
-        <div class="bg-ui-800 w-full max-w-sm p-6 md:p-8 rounded-2xl border border-brand-600/30 shadow-2xl relative">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-brand-400"><i class="fas fa-times text-lg"></i></button>
-            <h2 class="text-xl md:text-2xl font-bold text-brand-500 mb-6 text-center uppercase tracking-widest">Acesso</h2>
-            <input type="email" id="admin-email" placeholder="E-mail" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-4 text-brand-400 text-sm outline-none">
-            <input type="password" id="admin-password" placeholder="Senha" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-6 text-brand-400 text-sm outline-none">
-            <button onclick="loginAdmin()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold text-sm uppercase">Entrar</button>
         </div>
     </div>
 
     <!-- Painel Admin -->
     <div id="admin-overlay" class="fixed inset-0 bg-black/80 z-50 hidden" onclick="toggleAdmin()"></div>
     <div id="admin-panel" class="fixed top-0 right-0 w-full md:max-w-2xl h-full bg-ui-900 shadow-2xl z-[60] panel-transition translate-x-full overflow-y-auto p-4 md:p-8 border-l border-brand-600/30 text-brand-400">
-        <div class="flex justify-between items-center mb-6 md:mb-8">
-            <h2 class="text-xl md:text-2xl font-bold text-brand-500">Painel</h2>
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-brand-500 uppercase">Configuração</h2>
             <div class="flex gap-2">
-                <button onclick="logoutAdmin()" class="text-red-500 text-[9px] font-bold uppercase px-3 py-1.5 rounded-full border border-red-500/20">SAIR</button>
+                <button onclick="logoutAdmin()" class="text-red-500 text-[9px] font-bold border border-red-500/20 px-2 py-1 rounded">SAIR</button>
                 <button onclick="toggleAdmin()" class="text-brand-400"><i class="fas fa-times text-xl"></i></button>
             </div>
         </div>
 
-        <div class="flex border-b border-brand-600/30 mb-6 overflow-x-auto no-scrollbar gap-2">
-            <button onclick="switchTab('sections')" class="tab-btn whitespace-nowrap px-3 py-2 border-b-2 border-brand-500 font-bold text-brand-500 text-[10px] md:text-sm uppercase">Seções</button>
-            <button onclick="switchTab('banners')" class="tab-btn whitespace-nowrap px-3 py-2 text-brand-600/70 text-[10px] md:text-sm uppercase">Banners</button>
-            <button onclick="switchTab('products')" class="tab-btn whitespace-nowrap px-3 py-2 text-brand-600/70 text-[10px] md:text-sm uppercase">Produtos</button>
-            <button onclick="switchTab('site')" class="tab-btn whitespace-nowrap px-3 py-2 text-brand-600/70 text-[10px] md:text-sm uppercase">Site</button>
+        <div class="flex border-b border-brand-600/30 mb-6 overflow-x-auto no-scrollbar gap-1">
+            <button onclick="switchTab('sections')" class="tab-btn px-3 py-2 text-[10px] uppercase font-bold text-brand-500 border-b-2 border-brand-500">Seções</button>
+            <button onclick="switchTab('banners')" class="tab-btn px-3 py-2 text-[10px] uppercase text-brand-600/70">Banners</button>
+            <button onclick="switchTab('products')" class="tab-btn px-3 py-2 text-[10px] uppercase text-brand-600/70">Produtos</button>
+            <button onclick="switchTab('testimonials')" class="tab-btn px-3 py-2 text-[10px] uppercase text-brand-600/70">Depoimentos</button>
+            <button onclick="switchTab('site')" class="tab-btn px-3 py-2 text-[10px] uppercase text-brand-600/70">Site</button>
         </div>
 
+        <!-- Tab Seções -->
         <div id="tab-sections" class="tab-content">
             <div class="bg-ui-800 p-4 rounded-xl mb-6 border border-brand-600/20">
                 <div class="flex gap-2">
-                    <input type="text" id="section-name" placeholder="Nome" class="flex-1 bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs outline-none">
-                    <button onclick="createSection()" class="bg-brand-500 text-black px-4 py-2.5 rounded-xl font-bold text-[10px] uppercase">ADD</button>
+                    <input type="text" id="section-name" placeholder="Nome da Seção" class="flex-1 bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs">
+                    <button onclick="createSection()" class="bg-brand-500 text-black px-4 font-bold text-[10px]">ADD</button>
                 </div>
             </div>
-            <div id="admin-sections-list" class="space-y-2.5"></div>
+            <div id="admin-sections-list" class="space-y-2"></div>
         </div>
 
+        <!-- Tab Banners -->
         <div id="tab-banners" class="tab-content hidden">
             <div class="bg-ui-800 p-4 rounded-xl mb-6 border border-brand-600/20">
-                <input type="text" id="banner-url" placeholder="URL Imagem" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none">
-                <input type="text" id="banner-link" placeholder="Link Destino" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none">
-                <select id="banner-section" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-4 text-brand-400 text-[10px] outline-none"></select>
-                <button onclick="addBanner()" class="w-full bg-brand-500 text-black py-2.5 rounded-xl font-bold text-[10px] uppercase">Salvar Banner</button>
+                <input type="text" id="banner-url" placeholder="URL Imagem" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-2">
+                <input type="text" id="banner-link" placeholder="Link Destino" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-2">
+                <select id="banner-section" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-3"></select>
+                <button onclick="addBanner()" class="w-full bg-brand-500 text-black py-2.5 font-bold text-[10px] rounded-xl uppercase">Salvar Banner</button>
             </div>
             <div id="admin-banners-list" class="grid grid-cols-1 gap-4"></div>
         </div>
 
+        <!-- Tab Produtos -->
         <div id="tab-products" class="tab-content hidden">
             <div class="bg-ui-800 p-4 rounded-xl mb-6 border border-brand-600/20">
-                <input type="text" id="prod-name" placeholder="Nome" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none">
-                <input type="number" id="prod-price" placeholder="Preço" step="0.01" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none">
-                <textarea id="prod-desc" placeholder="Descrição" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none" rows="2"></textarea>
-                <select id="prod-section" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-4 text-brand-400 text-[10px] outline-none"></select>
-                <div class="grid grid-cols-2 gap-2 mb-4">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 1">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 2">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 3">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 4">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 5">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 6">
+                <input type="text" id="prod-name" placeholder="Nome" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-2">
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                    <input type="number" id="prod-original-price" placeholder="Preço DE (R$)" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs">
+                    <input type="number" id="prod-price" placeholder="Preço POR (R$)" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs">
                 </div>
-                <button onclick="addProduct()" class="w-full bg-brand-500 text-black py-2.5 rounded-xl font-bold text-[10px] uppercase">Cadastrar</button>
+                <textarea id="prod-desc" placeholder="Descrição" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-2" rows="2"></textarea>
+                <select id="prod-section" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-3"></select>
+                <div class="grid grid-cols-3 gap-1.5 mb-4">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px]" placeholder="Img 1">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px]" placeholder="Img 2">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px]" placeholder="Img 3">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px]" placeholder="Img 4">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px]" placeholder="Img 5">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px]" placeholder="Img 6">
+                </div>
+                <button onclick="addProduct()" class="w-full bg-brand-500 text-black py-2.5 font-bold text-[10px] rounded-xl uppercase">Cadastrar Produto</button>
             </div>
             <div id="admin-products-list" class="space-y-3"></div>
         </div>
 
+        <!-- Tab Depoimentos -->
+        <div id="tab-testimonials" class="tab-content hidden">
+            <div class="bg-ui-800 p-4 rounded-xl mb-6 border border-brand-600/20">
+                <input type="text" id="test-name" placeholder="Nome do Cliente" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-2">
+                <input type="text" id="test-photo" placeholder="Link da Foto de Perfil" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-2">
+                <textarea id="test-comment" placeholder="Depoimento dele(a)" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-2" rows="3"></textarea>
+                <select id="test-rating" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs mb-3">
+                    <option value="5">5 Estrelas</option>
+                    <option value="4">4 Estrelas</option>
+                    <option value="3">3 Estrelas</option>
+                </select>
+                <button onclick="addTestimonial()" class="w-full bg-brand-500 text-black py-2.5 font-bold text-[10px] rounded-xl uppercase">Publicar Prova Social</button>
+            </div>
+            <div id="admin-testimonials-list" class="space-y-3"></div>
+        </div>
+
+        <!-- Tab Site -->
         <div id="tab-site" class="tab-content hidden">
             <div class="bg-ui-800 p-4 rounded-xl border border-brand-600/20 space-y-4">
-                <input type="text" id="set-store-name" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="Nome da Loja">
-                <input type="text" id="set-whatsapp" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="WhatsApp (55...)">
-                <input type="text" id="set-logo" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="URL Logo">
-                <input type="text" id="set-favicon" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="URL Favicon">
-                <select id="set-theme" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none">
+                <input type="text" id="set-store-name" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px]" placeholder="Nome da Loja">
+                <input type="text" id="set-whatsapp" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px]" placeholder="WhatsApp">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="set-logo" class="bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px]" placeholder="Logo URL">
+                    <input type="text" id="set-favicon" class="bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px]" placeholder="Favicon URL">
+                </div>
+                <select id="set-theme" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px]">
                     <option value="luxury">Luxury Gold</option>
                     <option value="winter">Winter</option>
                     <option value="summer">Summer</option>
@@ -387,20 +376,31 @@
                     <option value="valentines">Valentines</option>
                     <option value="halloween">Halloween</option>
                 </select>
-                <textarea id="set-about" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" rows="2" placeholder="Sobre nós..."></textarea>
-                <textarea id="set-ticker" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" rows="2" placeholder="Comunicado..."></textarea>
+                <textarea id="set-about" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px]" rows="2" placeholder="História..."></textarea>
+                <textarea id="set-ticker" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px]" rows="2" placeholder="Letreiro..."></textarea>
                 <div class="grid grid-cols-2 gap-2">
                     <input type="text" id="set-delivery" class="bg-ui-900 border border-brand-600/30 p-2 rounded-xl text-brand-400 text-[9px]" placeholder="Badge">
                     <input type="text" id="set-delivery-icon" class="bg-ui-900 border border-brand-600/30 p-2 rounded-xl text-brand-400 text-[9px]" placeholder="Ícone FA">
                 </div>
                 <div id="admin-badges-edit" class="space-y-2"></div>
-                <button onclick="saveSiteSettings()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold text-[10px] uppercase">SALVAR TUDO</button>
+                <button onclick="saveSiteSettings()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold text-[10px] uppercase">Salvar Configurações</button>
             </div>
         </div>
     </div>
 
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-4">
+        <div class="bg-ui-800 w-full max-w-sm p-6 rounded-2xl border border-brand-600/30 shadow-2xl relative">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-brand-400"><i class="fas fa-times text-lg"></i></button>
+            <h2 class="text-xl md:text-2xl font-bold text-brand-500 mb-6 text-center uppercase tracking-widest">Admin Access</h2>
+            <input type="email" id="admin-email" placeholder="E-mail" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-4 text-brand-400 text-sm outline-none">
+            <input type="password" id="admin-password" placeholder="Senha" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-6 text-brand-400 text-sm outline-none">
+            <button onclick="loginAdmin()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold text-sm uppercase">Entrar</button>
+        </div>
+    </div>
+
     <!-- Modal Detalhe Produto -->
-    <div id="product-modal" class="fixed inset-0 bg-black/80 z-[80] hidden flex items-center justify-center p-2 md:p-4">
+    <div id="product-modal" class="fixed inset-0 bg-black/80 z-[80] hidden flex items-center justify-center p-2">
         <div class="bg-ui-800 w-full max-w-5xl max-h-[95vh] overflow-y-auto rounded-2xl relative p-4 md:p-10 border border-brand-600/30 shadow-2xl">
             <button onclick="closeProductModal()" class="absolute top-2 right-2 md:top-4 md:right-4 text-brand-400 z-20 bg-black/50 p-2 rounded-full"><i class="fas fa-times text-xl"></i></button>
             <div id="modal-content" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10"></div>
@@ -411,7 +411,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDI2KpH9QFlEyd6cLtybWx1MBhsI8K204o",
@@ -426,6 +426,7 @@
         const auth = getAuth(appFirebase);
         const db = getFirestore(appFirebase);
         const appId = "loja-do-corvo-final-v2"; 
+        const ADMIN_EMAIL = 'admin@corvo.com';
 
         const themes = {
             luxury: { brand400: "#e5c07b", brand500: "#d4af37", brand600: "#b5942f", bgMain: "#111111", bgCard: "#1a1a1a", textOnBrand: "#000000", particleType: 'dust', decoration: "✨" },
@@ -439,10 +440,9 @@
             halloween: { brand400: "#fb923c", brand500: "#ea580c", brand600: "#7c2d12", bgMain: "#090909", bgCard: "#1a1a1a", textOnBrand: "#000000", particleType: 'pumpkins', decoration: "🎃" }
         };
 
-        let currentUser = null, isAdmin = false, sections = [], banners = [], products = [], cart = [], currentFilter = 'all';
+        let currentUser = null, isAdmin = false, sections = [], banners = [], products = [], testimonials = [], cart = [], currentFilter = 'all';
         let siteSettings = { theme: "luxury", storeName: "Loja do Corvo", whatsappNumber: "5541999767744", logoUrl: "", faviconUrl: "", tickerText: "", aboutText: "", deliveryText: "", deliveryIcon: "fas fa-truck-fast", badges: [] };
 
-        const ADMIN_EMAIL = 'admin@corvo.com';
         const canvas = document.getElementById('effects-canvas'), ctx = canvas.getContext('2d');
         let particles = [], animationId;
 
@@ -509,8 +509,8 @@
 
         function updateAdminButton() {
             const btn = document.getElementById('admin-btn');
-            if (isAdmin) { btn.innerHTML = '<i class="fas fa-crown text-base md:text-xl text-brand-500 animate-pulse"></i>'; btn.onclick = toggleAdmin; }
-            else { btn.innerHTML = '<i class="fas fa-user-shield text-base md:text-xl"></i>'; btn.onclick = openLoginModal; }
+            if (isAdmin) { btn.innerHTML = '<i class="fas fa-crown text-base text-brand-500 animate-pulse"></i>'; btn.onclick = toggleAdmin; }
+            else { btn.innerHTML = '<i class="fas fa-user-shield text-base"></i>'; btn.onclick = openLoginModal; }
         }
 
         window.handleAdminClick = () => isAdmin ? toggleAdmin() : openLoginModal();
@@ -539,7 +539,14 @@
             onSnapshot(publicPath('sections'), (snap) => { sections = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); sections.sort((a, b) => (a.order || 0) - (b.order || 0)); renderAdminSections(); renderFilters(); renderStore(); updateSelects(); });
             onSnapshot(publicPath('banners'), (snap) => { banners = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderAdminBanners(); renderStore(); });
             onSnapshot(publicPath('products'), (snap) => { products = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderAdminProducts(); renderStore(); });
+            onSnapshot(publicPath('testimonials'), (snap) => { testimonials = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderAdminTestimonials(); renderTestimonials(); });
         }
+
+        // Helper para definir valores de inputs de forma segura
+        const safeSetVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.value = val || "";
+        };
 
         function applySiteSettings() {
             const t = themes[siteSettings.theme] || themes.luxury;
@@ -552,45 +559,62 @@
             const wNum = siteSettings.whatsappNumber || "5541999767744";
             document.getElementById('page-title').innerText = `${sName} - Luxury Ecommerce`;
             document.getElementById('store-name-nav').innerText = sName;
-            document.getElementById('footer-copyright').innerText = `© 2024 ${sName}. Todos os direitos reservados.`;
-            document.getElementById('footer-phone-display').innerText = wNum;
+            
+            const copyEl = document.getElementById('footer-copyright');
+            if (copyEl) copyEl.innerText = `© 2024 ${sName}. Todos os direitos reservados.`;
+            
+            const phoneEl = document.getElementById('footer-phone-display');
+            if (phoneEl) phoneEl.innerText = wNum;
 
             const waUrl = `https://wa.me/${wNum}`;
-            document.getElementById('whatsapp-floating-btn').href = waUrl;
-            document.getElementById('footer-whatsapp-support').href = waUrl;
-            document.getElementById('footer-whatsapp-icon').href = waUrl;
+            const btnFloat = document.getElementById('whatsapp-floating-btn'); if (btnFloat) btnFloat.href = waUrl;
+            const btnSupport = document.getElementById('footer-whatsapp-support'); if (btnSupport) btnSupport.href = waUrl;
+            const btnIcon = document.getElementById('footer-whatsapp-icon'); if (btnIcon) btnIcon.href = waUrl;
 
-            document.getElementById('logo-nav').src = siteSettings.logoUrl || "https://i.ibb.co/zVr3Fk0c/logo.png";
-            document.getElementById('logo-footer').src = siteSettings.logoUrl || "https://i.ibb.co/zVr3Fk0c/logo.png";
-            document.getElementById('site-favicon').href = siteSettings.faviconUrl || siteSettings.logoUrl || "https://i.ibb.co/zVr3Fk0c/logo.png";
+            const logoNav = document.getElementById('logo-nav'); if (logoNav) logoNav.src = siteSettings.logoUrl || "https://i.ibb.co/zVr3Fk0c/logo.png";
+            const logoFooter = document.getElementById('logo-footer'); if (logoFooter) logoFooter.src = siteSettings.logoUrl || "https://i.ibb.co/zVr3Fk0c/logo.png";
+            const favicon = document.getElementById('site-favicon'); if (favicon) favicon.href = siteSettings.faviconUrl || siteSettings.logoUrl || "https://i.ibb.co/zVr3Fk0c/logo.png";
 
-            document.getElementById('site-ticker').innerText = (siteSettings.tickerText + " • ").repeat(3);
-            document.getElementById('top-delivery-badge').innerHTML = `<i class="${siteSettings.deliveryIcon || 'fas fa-truck-fast'}"></i> <span class="hidden xs:inline">${siteSettings.deliveryText}</span>`;
-            document.getElementById('footer-about').innerText = siteSettings.aboutText;
+            const ticker = document.getElementById('site-ticker'); if (ticker) ticker.innerText = (siteSettings.tickerText + " • ").repeat(3);
+            const badge = document.getElementById('top-delivery-badge'); 
+            if (badge) badge.innerHTML = `<i class="${siteSettings.deliveryIcon || 'fas fa-truck-fast'}"></i> <span class="hidden xs:inline">${siteSettings.deliveryText || "ENTREGA VIP"}</span>`;
             
-            document.getElementById('badges-container').innerHTML = (siteSettings.badges || []).map(b => `
-                <div class="flex items-center gap-2 md:gap-4 p-3 md:p-5 bg-ui-800 rounded-xl shadow-lg border border-brand-600/20 backdrop-blur-sm relative overflow-hidden group">
-                    <div class="absolute -right-1 md:-right-2 -bottom-1 md:-bottom-2 text-2xl md:text-4xl opacity-5 transition-transform group-hover:scale-150">${t.decoration}</div>
-                    <i class="${b.icon} text-brand-500 text-xl md:text-3xl"></i>
-                    <div class="relative z-10"><p class="text-[10px] md:text-sm font-bold text-brand-400">${b.title}</p><p class="text-[8px] md:text-xs text-gold-600/60 line-clamp-1">${b.desc}</p></div>
-                </div>
-            `).join('');
-
-            if (isAdmin) {
-                document.getElementById('set-store-name').value = sName; document.getElementById('set-whatsapp').value = wNum;
-                document.getElementById('set-logo').value = siteSettings.logoUrl || ""; document.getElementById('set-favicon').value = siteSettings.faviconUrl || "";
-                document.getElementById('set-theme').value = siteSettings.theme; document.getElementById('set-about').value = siteSettings.aboutText;
-                document.getElementById('set-ticker').value = siteSettings.tickerText; document.getElementById('set-delivery').value = siteSettings.deliveryText;
-                document.getElementById('set-delivery-icon').value = siteSettings.deliveryIcon;
-                document.getElementById('admin-badges-edit').innerHTML = (siteSettings.badges || []).map((b, i) => `
-                    <div class="bg-ui-900/50 p-2.5 rounded-xl border border-brand-600/10 space-y-2">
-                        <input type="text" value="${b.icon}" data-index="${i}" data-field="icon" class="badge-input bg-ui-800 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] w-full outline-none">
-                        <div class="grid grid-cols-2 gap-2">
-                             <input type="text" value="${b.title}" data-index="${i}" data-field="title" class="badge-input bg-ui-800 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] outline-none">
-                             <input type="text" value="${b.desc}" data-index="${i}" data-field="desc" class="badge-input bg-ui-800 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] outline-none">
-                        </div>
+            const about = document.getElementById('footer-about'); if (about) about.innerText = siteSettings.aboutText || "";
+            
+            const badgesContainer = document.getElementById('badges-container');
+            if (badgesContainer) {
+                badgesContainer.innerHTML = (siteSettings.badges || []).map(b => `
+                    <div class="flex items-center gap-2 md:gap-4 p-3 md:p-5 bg-ui-800 rounded-xl shadow-lg border border-brand-600/20 backdrop-blur-sm relative overflow-hidden group">
+                        <div class="absolute -right-1 md:-right-2 -bottom-1 md:-bottom-2 text-2xl md:text-4xl opacity-5 transition-transform group-hover:scale-150">${t.decoration}</div>
+                        <i class="${b.icon} text-brand-500 text-xl md:text-3xl"></i>
+                        <div class="relative z-10"><p class="text-[10px] md:text-sm font-bold text-brand-400 uppercase">${b.title}</p><p class="text-[8px] md:text-xs text-gold-600/60 line-clamp-1">${b.desc}</p></div>
                     </div>
                 `).join('');
+            }
+
+            if (isAdmin) {
+                safeSetVal('set-store-name', sName);
+                safeSetVal('set-whatsapp', wNum);
+                safeSetVal('set-logo', siteSettings.logoUrl);
+                safeSetVal('set-favicon', siteSettings.faviconUrl);
+                safeSetVal('set-theme', siteSettings.theme);
+                safeSetVal('set-about', siteSettings.aboutText);
+                safeSetVal('set-ticker', siteSettings.tickerText);
+                safeSetVal('set-delivery', siteSettings.deliveryText);
+                safeSetVal('set-delivery-icon', siteSettings.deliveryIcon);
+                
+                const badgeEdit = document.getElementById('admin-badges-edit');
+                if (badgeEdit) {
+                    badgeEdit.innerHTML = (siteSettings.badges || []).map((b, i) => `
+                        <div class="bg-ui-900/50 p-2.5 rounded-xl border border-brand-600/10 space-y-2">
+                            <input type="text" value="${b.icon}" data-index="${i}" data-field="icon" class="badge-input bg-ui-800 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] w-full">
+                            <div class="grid grid-cols-2 gap-2">
+                                 <input type="text" value="${b.title}" data-index="${i}" data-field="title" class="badge-input bg-ui-800 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px]">
+                                 <input type="text" value="${b.desc}" data-index="${i}" data-field="desc" class="badge-input bg-ui-800 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px]">
+                            </div>
+                        </div>
+                    `).join('');
+                }
             }
         }
 
@@ -598,39 +622,51 @@
             if (!isAdmin) return;
             const b = [];
             for(let i=0; i<4; i++) {
-                b.push({
-                    id: i+1,
-                    icon: document.querySelector(`.badge-input[data-index="${i}"][data-field="icon"]`).value,
-                    title: document.querySelector(`.badge-input[data-index="${i}"][data-field="title"]`).value,
-                    desc: document.querySelector(`.badge-input[data-index="${i}"][data-field="desc"]`).value
-                });
+                const icon = document.querySelector(`.badge-input[data-index="${i}"][data-field="icon"]`);
+                const title = document.querySelector(`.badge-input[data-index="${i}"][data-field="title"]`);
+                const desc = document.querySelector(`.badge-input[data-index="${i}"][data-field="desc"]`);
+                if(icon && title && desc) {
+                    b.push({ id: i+1, icon: icon.value, title: title.value, desc: desc.value });
+                }
             }
-            const data = { storeName: document.getElementById('set-store-name').value.trim(), whatsappNumber: document.getElementById('set-whatsapp').value.trim(), logoUrl: document.getElementById('set-logo').value, faviconUrl: document.getElementById('set-favicon').value, theme: document.getElementById('set-theme').value, aboutText: document.getElementById('set-about').value, tickerText: document.getElementById('set-ticker').value, deliveryText: document.getElementById('set-delivery').value, deliveryIcon: document.getElementById('set-delivery-icon').value, badges: b };
+            const data = { 
+                storeName: document.getElementById('set-store-name').value.trim(),
+                whatsappNumber: document.getElementById('set-whatsapp').value.trim(),
+                logoUrl: document.getElementById('set-logo').value,
+                faviconUrl: document.getElementById('set-favicon').value,
+                theme: document.getElementById('set-theme').value, 
+                aboutText: document.getElementById('set-about').value,
+                tickerText: document.getElementById('set-ticker').value, 
+                deliveryText: document.getElementById('set-delivery').value, 
+                deliveryIcon: document.getElementById('set-delivery-icon').value, 
+                badges: b 
+            };
             try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'config', 'site'), data); showToast("Aplicado globalmente! ✨"); }
             catch(e) { showToast("Erro ao salvar."); }
         };
 
-        window.scrollCarousel = (id, dir) => { const c = document.getElementById(id); c.scrollBy({left: c.offsetWidth * dir, behavior: 'smooth'}); };
+        window.scrollCarousel = (id, dir) => { const c = document.getElementById(id); if(c) c.scrollBy({left: c.offsetWidth * dir, behavior: 'smooth'}); };
         function formatCurrency(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
         function renderBannerItem(b) { const content = `<img src="${b.url}" class="banner-aspect" alt="Banner">`; return b.link ? `<a href="${b.link}" target="_blank" class="block w-full">${content}</a>` : content; }
 
         function renderCarousel(bannersList, containerId, navId) {
-            if (bannersList.length === 0) return `<div class="w-full banner-aspect flex items-center justify-center text-brand-600/50 font-bold uppercase text-[10px] md:text-sm">Vitrine ${siteSettings.storeName}</div>`;
+            if (bannersList.length === 0) return `<div class="w-full banner-aspect flex items-center justify-center text-brand-600/50 font-bold uppercase text-[10px] md:text-sm">Vitrine Premium</div>`;
             if (bannersList.length === 1) return renderBannerItem(bannersList[0]);
             const carouselId = `carousel-${containerId}`;
             const slides = bannersList.map((b, idx) => `<div class="carousel-item" id="${carouselId}-slide-${idx}">${renderBannerItem(b)}</div>`).join('');
-            const dots = bannersList.map((_, idx) => `<button onclick="document.getElementById('${carouselId}').scrollTo({left: document.getElementById('${carouselId}').offsetWidth * ${idx}, behavior: 'smooth'})" class="w-1.5 md:w-2 h-1.5 md:h-2 rounded-full bg-brand-600/30 hover:bg-brand-500"></button>`).join('');
-            if (navId) document.getElementById(navId).innerHTML = dots;
+            const dots = bannersList.map((_, idx) => `<button onclick="document.getElementById('${carouselId}').scrollTo({left: document.getElementById('${carouselId}').offsetWidth * ${idx}, behavior: 'smooth'})" class="w-1.5 md:w-2 h-1.5 md:h-2 rounded-full bg-brand-600/30 hover:bg-brand-500 transition-all"></button>`).join('');
+            const navEl = document.getElementById(navId); if (navEl) navEl.innerHTML = dots;
             return `<div class="relative group/local"><div id="${carouselId}" class="carousel-container">${slides}</div><button onclick="scrollCarousel('${carouselId}', -1)" class="absolute left-1 md:left-2 top-1/2 -translate-y-1/2 bg-black/40 text-brand-500 w-6 md:w-8 h-6 md:h-8 rounded-full flex items-center justify-center opacity-100 md:opacity-0 group-hover/local:opacity-100 z-10"><i class="fas fa-chevron-left text-[10px]"></i></button><button onclick="scrollCarousel('${carouselId}', 1)" class="absolute right-1 md:right-2 top-1/2 -translate-y-1/2 bg-black/40 text-brand-500 w-6 md:w-8 h-6 md:h-8 rounded-full flex items-center justify-center opacity-100 md:opacity-0 group-hover/local:opacity-100 z-10"><i class="fas fa-chevron-right text-[10px]"></i></button></div>`;
         }
 
         window.setFilter = (filter) => { currentFilter = filter; renderFilters(); renderStore(); window.scrollTo({ top: document.getElementById('store-content').offsetTop - 120, behavior: 'smooth' }); };
-        function renderFilters() { const bar = document.getElementById('filter-bar'); let h = `<button onclick="setFilter('all')" class="${currentFilter === 'all' ? 'bg-brand-500 text-black shadow-lg shadow-brand-500/20' : 'bg-ui-800 text-brand-400 border border-brand-600/20'} px-5 py-1.5 rounded-full font-bold text-[9px] md:text-xs uppercase tracking-widest whitespace-nowrap transition-all">Ver Tudo</button>`; sections.forEach(s => { const active = currentFilter === s.id; h += `<button onclick="setFilter('${s.id}')" class="${active ? 'bg-brand-500 text-black' : 'bg-ui-800 text-brand-400 border border-brand-600/20'} px-5 py-1.5 rounded-full font-bold text-[9px] md:text-xs uppercase tracking-widest whitespace-nowrap transition-all">${s.name}</button>`; }); bar.innerHTML = h; }
+        function renderFilters() { const bar = document.getElementById('filter-bar'); if(!bar) return; let h = `<button onclick="setFilter('all')" class="${currentFilter === 'all' ? 'bg-brand-500 text-black shadow-lg shadow-brand-500/20' : 'bg-ui-800 text-brand-400 border border-brand-600/20'} px-5 py-1.5 rounded-full font-bold text-[9px] md:text-xs uppercase tracking-widest whitespace-nowrap transition-all">Ver Tudo</button>`; sections.forEach(s => { const active = currentFilter === s.id; h += `<button onclick="setFilter('${s.id}')" class="${active ? 'bg-brand-500 text-black' : 'bg-ui-800 text-brand-400 border border-brand-600/20 hover:border-brand-500/50'} px-5 py-1.5 rounded-full font-bold text-[9px] md:text-xs uppercase tracking-widest whitespace-nowrap transition-all">${s.name}</button>`; }); bar.innerHTML = h; }
 
         function renderStore() {
             const content = document.getElementById('store-content');
-            document.getElementById('main-banners').innerHTML = renderCarousel(banners.filter(b => b.sectionId === 'header'), 'header-main', 'main-banners-nav');
-            if (sections.length === 0) { content.innerHTML = `<div class="text-center py-20 text-brand-600/50 text-xs md:text-sm"><p>Carregando Coleções...</p></div>`; return; }
+            const mainBannersEl = document.getElementById('main-banners');
+            if (mainBannersEl) mainBannersEl.innerHTML = renderCarousel(banners.filter(b => b.sectionId === 'header'), 'header-main', 'main-banners-nav');
+            if (sections.length === 0) { if(content) content.innerHTML = `<div class="text-center py-20 text-brand-600/50 text-xs md:text-sm"><p>Carregando Coleções...</p></div>`; return; }
             let h = '';
             sections.forEach(section => {
                 if (currentFilter !== 'all' && section.id !== currentFilter) return;
@@ -643,60 +679,99 @@
                             <h2 class="text-base md:text-3xl font-bold text-brand-500 uppercase tracking-tighter">${section.name}</h2>
                         </div>
                         <div class="products-grid">
-                            ${sp.map(p => `
+                            ${sp.map(p => {
+                                const hasDiscount = p.originalPrice && Number(p.originalPrice) > Number(p.price);
+                                return `
                                 <div class="product-card group bg-ui-800/60 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-brand-600/20 shadow-lg relative transition-all duration-500">
                                     <div class="aspect-square md:aspect-[4/5] bg-ui-900 relative overflow-hidden">
                                         <img src="${p.images[0]}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onclick="viewProduct('${p.id}')">
+                                        ${hasDiscount ? `<div class="absolute top-2 left-2 bg-red-600 text-white text-[8px] md:text-[10px] font-bold px-2 py-0.5 rounded shadow-lg z-20">OFERTA</div>` : ''}
                                         <div class="product-actions absolute inset-0 bg-black/40 opacity-0 flex flex-col items-center justify-end p-4 transition-opacity hidden md:flex">
                                             <button onclick="viewProduct('${p.id}')" class="w-full bg-brand-500 text-black py-2 rounded-xl font-bold text-xs shadow-lg">Ver Detalhes</button>
                                         </div>
-                                        <button onclick="addToCart('${p.id}')" class="absolute top-2 right-2 md:top-4 md:right-4 bg-brand-500 text-black p-2 md:p-3 rounded-full shadow-lg z-10"><i class="fas fa-shopping-bag text-[10px] md:text-base"></i></button>
+                                        <button onclick="addToCart('${p.id}')" class="absolute top-2 right-2 md:top-4 md:right-4 bg-brand-500 text-black p-2 md:p-3 rounded-full shadow-lg z-10 hover:scale-110"><i class="fas fa-shopping-bag text-[10px] md:text-base"></i></button>
                                     </div>
                                     <div class="p-3 md:p-6" onclick="viewProduct('${p.id}')">
                                         <h3 class="font-bold text-[10px] md:text-lg mb-1 md:mb-2 text-brand-400 line-clamp-1">${p.name}</h3>
-                                        <span class="text-xs md:text-2xl font-black text-brand-500">${formatCurrency(p.price)}</span>
+                                        <div class="flex flex-col">
+                                            ${hasDiscount ? `<span class="text-[8px] md:text-xs text-brand-600 line-through">DE ${formatCurrency(p.originalPrice)}</span>` : ''}
+                                            <span class="text-xs md:text-2xl font-black text-brand-500">${formatCurrency(p.price)}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
                 `;
             });
-            content.innerHTML = h || `<div class="text-center py-20 text-brand-600/50"><p>Nenhum item encontrado.</p></div>`;
+            if(content) content.innerHTML = h || `<div class="text-center py-20 text-brand-600/50"><p>Nenhum item encontrado.</p></div>`;
+        }
+
+        window.renderTestimonials = () => {
+            const container = document.getElementById('testimonials-container');
+            const section = document.getElementById('testimonials-section');
+            if (testimonials.length === 0) { if(section) section.classList.add('hidden'); return; }
+            if(section) section.classList.remove('hidden');
+            if(container) {
+                container.innerHTML = testimonials.map(t => `
+                    <div class="testimonial-card p-6 rounded-2xl relative overflow-hidden backdrop-blur-sm border border-brand-600/10">
+                        <div class="flex items-center gap-4 mb-4">
+                            <img src="${t.photoUrl || 'https://via.placeholder.com/100'}" class="w-12 h-12 rounded-full object-cover border border-brand-600/20">
+                            <div>
+                                <h4 class="font-bold text-brand-400 text-sm">${t.name}</h4>
+                                <div class="flex text-brand-500 text-[10px]">
+                                    ${Array(Number(t.rating)).fill('<i class="fas fa-star"></i>').join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-brand-600 text-xs leading-relaxed italic">"${t.comment}"</p>
+                        <i class="fas fa-quote-right absolute bottom-4 right-4 opacity-5 text-4xl"></i>
+                    </div>
+                `).join('');
+            }
         }
 
         window.viewProduct = (id) => {
             const p = products.find(prod => prod.id === id); if (!p) return;
-            document.getElementById('modal-content').innerHTML = `
-                <div class="space-y-4 md:space-y-6">
-                    <img id="main-modal-img" src="${p.images[0]}" class="w-full aspect-square md:aspect-[4/5] object-cover rounded-2xl border border-brand-600/20 shadow-2xl">
-                    <div class="grid grid-cols-6 gap-2 md:gap-3">
-                        ${p.images.map(img => `<img src="${img}" onclick="document.getElementById('main-modal-img').src='${img}'" class="aspect-square object-cover rounded-lg cursor-pointer border border-brand-600/20 hover:border-brand-500 transition-all">`).join('')}
+            const hasDiscount = p.originalPrice && Number(p.originalPrice) > Number(p.price);
+            const modalContent = document.getElementById('modal-content');
+            if (modalContent) {
+                modalContent.innerHTML = `
+                    <div class="space-y-4 md:space-y-6">
+                        <img id="main-modal-img" src="${p.images[0]}" class="w-full aspect-square md:aspect-[4/5] object-cover rounded-2xl border border-brand-600/20 shadow-2xl">
+                        <div class="grid grid-cols-6 gap-2 md:gap-3">
+                            ${p.images.map(img => `<img src="${img}" onclick="document.getElementById('main-modal-img').src='${img}'" class="aspect-square object-cover rounded-lg cursor-pointer border border-brand-600/20 hover:border-brand-500 transition-all">`).join('')}
+                        </div>
                     </div>
-                </div>
-                <div class="flex flex-col justify-center">
-                    <h2 class="text-xl md:text-4xl font-black mb-2 md:mb-4 text-brand-500 leading-tight">${p.name}</h2>
-                    <span class="text-lg md:text-3xl font-black text-brand-400 mb-6 md:mb-8">${formatCurrency(p.price)}</span>
-                    <p class="text-brand-600/80 leading-relaxed mb-8 md:mb-10 text-[10px] md:text-sm">${p.description}</p>
-                    <button onclick="addToCart('${p.id}'); closeProductModal();" class="w-full bg-brand-500 text-black py-3.5 md:py-5 rounded-xl font-bold text-xs md:text-lg shadow-lg">ADICIONAR À SACOLA</button>
-                </div>
-            `;
-            document.getElementById('product-modal').classList.remove('hidden');
+                    <div class="flex flex-col justify-center">
+                        <h2 class="text-xl md:text-4xl font-black mb-2 md:mb-4 text-brand-500 leading-tight uppercase">${p.name}</h2>
+                        <div class="flex flex-col mb-6 md:mb-8">
+                            ${hasDiscount ? `<span class="text-xs md:text-lg text-brand-600 line-through">De ${formatCurrency(p.originalPrice)}</span>` : ''}
+                            <span class="text-lg md:text-3xl font-black text-brand-400">${hasDiscount ? 'Por ' : ''}${formatCurrency(p.price)}</span>
+                        </div>
+                        <p class="text-brand-600/80 leading-relaxed mb-8 md:mb-10 text-[10px] md:text-sm">${p.description}</p>
+                        <button onclick="addToCart('${p.id}'); closeProductModal();" class="w-full bg-brand-500 text-black py-3.5 md:py-5 rounded-xl font-bold text-xs md:text-lg uppercase tracking-widest shadow-xl">Adicionar à Sacola</button>
+                    </div>
+                `;
+            }
+            const modal = document.getElementById('product-modal'); if(modal) modal.classList.remove('hidden');
         };
 
-        window.closeProductModal = () => document.getElementById('product-modal').classList.add('hidden');
+        window.closeProductModal = () => { const el = document.getElementById('product-modal'); if(el) el.classList.add('hidden'); };
         window.addToCart = (id) => { const p = products.find(prod => prod.id === id); if (p) { cart.push(p); updateCartUI(); showToast("Na sacola! ✨"); } };
         window.removeFromCart = (idx) => { cart.splice(idx, 1); updateCartUI(); renderCartItems(); };
-        function updateCartUI() { document.getElementById('cart-count').innerText = cart.length; document.getElementById('cart-total').innerText = formatCurrency(cart.reduce((s, i) => s + (Number(i.price) || 0), 0)); }
+        function updateCartUI() { const count = document.getElementById('cart-count'); if(count) count.innerText = cart.length; const total = document.getElementById('cart-total'); if(total) total.innerText = formatCurrency(cart.reduce((s, i) => s + (Number(i.price) || 0), 0)); }
 
         window.toggleCart = () => {
             const o = document.getElementById('cart-overlay'), p = document.getElementById('cart-panel');
+            if(!o || !p) return;
             if (o.classList.contains('hidden')) { o.classList.remove('hidden'); renderCartItems(); setTimeout(() => { o.classList.remove('opacity-0'); p.classList.remove('translate-x-full'); }, 10); }
             else { o.classList.add('opacity-0'); p.classList.add('translate-x-full'); setTimeout(() => o.classList.add('hidden'), 300); }
         };
 
         function renderCartItems() {
-            const c = document.getElementById('cart-items'); if (cart.length === 0) { c.innerHTML = `<p class="text-center text-brand-600/50 py-10 text-xs">Sua sacola está vazia.</p>`; return; }
+            const c = document.getElementById('cart-items'); if(!c) return;
+            if (cart.length === 0) { c.innerHTML = `<p class="text-center text-brand-600/50 py-10 text-xs">Sua sacola está vazia.</p>`; return; }
             c.innerHTML = cart.map((i, idx) => `
                 <div class="flex gap-3 bg-ui-800 p-3 rounded-xl border border-brand-600/20 relative backdrop-blur-md">
                     <img src="${i.images[0]}" class="w-12 h-16 object-cover rounded-lg">
@@ -725,7 +800,8 @@
         };
 
         function renderAdminSections() { 
-            document.getElementById('admin-sections-list').innerHTML = sections.map((s, idx) => `
+            const list = document.getElementById('admin-sections-list'); if(!list) return;
+            list.innerHTML = sections.map((s, idx) => `
                 <div class="flex justify-between items-center p-3 bg-ui-900 border border-brand-600/20 rounded-xl">
                     <div class="flex items-center gap-2">
                         <div class="flex flex-col gap-0.5">
@@ -739,18 +815,43 @@
             `).join(''); 
         }
 
-        function renderAdminBanners() { document.getElementById('admin-banners-list').innerHTML = banners.map(b => `<div class="bg-ui-900 border border-brand-600/20 rounded-xl p-2 group"><img src="${b.url}" class="h-10 w-full object-contain bg-black rounded mb-2"><div class="flex justify-between text-[7px] uppercase font-black text-brand-600"><span>${b.sectionId === 'header' ? 'Topo' : sections.find(s => s.id === b.sectionId)?.name}</span><button onclick="deleteDocById('banners', '${b.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div></div>`).join(''); }
-        function renderAdminProducts() { document.getElementById('admin-products-list').innerHTML = products.map(p => `<div class="flex gap-2 bg-ui-900 border border-brand-600/20 rounded-xl p-2 items-center"><img src="${p.images[0]}" class="h-8 w-8 object-cover rounded"><h4 class="font-bold text-[9px] text-brand-400 flex-1 line-clamp-1">${p.name}</h4><button onclick="deleteDocById('products', '${p.id}')" class="text-red-500"><i class="fas fa-trash text-[9px]"></i></button></div>`).join(''); }
-        function updateSelects() { const opts = `<option value="header">Topo</option>` + sections.map(s => `<option value="${s.id}">${s.name}</option>`).join(''); document.getElementById('banner-section').innerHTML = opts; document.getElementById('prod-section').innerHTML = sections.map(s => `<option value="${s.id}">${s.name}</option>`).join(''); }
+        function renderAdminBanners() { const el = document.getElementById('admin-banners-list'); if(el) el.innerHTML = banners.map(b => `<div class="bg-ui-900 border border-brand-600/20 rounded-xl p-2 group"><img src="${b.url}" class="h-10 w-full object-contain bg-black rounded mb-2"><div class="flex justify-between text-[7px] uppercase font-black text-brand-600"><span>${b.sectionId === 'header' ? 'Topo' : sections.find(s => s.id === b.sectionId)?.name}</span><button onclick="deleteDocById('banners', '${b.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div></div>`).join(''); }
+        function renderAdminProducts() { const el = document.getElementById('admin-products-list'); if(el) el.innerHTML = products.map(p => `<div class="flex gap-2 bg-ui-900 border border-brand-600/20 rounded-xl p-2 items-center"><img src="${p.images[0]}" class="h-8 w-8 object-cover rounded"><h4 class="font-bold text-[9px] text-brand-400 flex-1 line-clamp-1">${p.name}</h4><button onclick="deleteDocById('products', '${p.id}')" class="text-red-500"><i class="fas fa-trash text-[9px]"></i></button></div>`).join(''); }
+        function renderAdminTestimonials() { const el = document.getElementById('admin-testimonials-list'); if(el) el.innerHTML = testimonials.map(t => `<div class="flex gap-2 bg-ui-900 border border-brand-600/20 rounded-xl p-2 items-center"><img src="${t.photoUrl || 'https://via.placeholder.com/50'}" class="h-8 w-8 rounded-full object-cover"><h4 class="font-bold text-[9px] text-brand-400 flex-1 line-clamp-1">${t.name}</h4><button onclick="deleteDocById('testimonials', '${t.id}')" class="text-red-500"><i class="fas fa-trash text-[9px]"></i></button></div>`).join(''); }
+        function updateSelects() { const opts = `<option value="header">Topo</option>` + sections.map(s => `<option value="${s.id}">${s.name}</option>`).join(''); const bS = document.getElementById('banner-section'); if(bS) bS.innerHTML = opts; const pS = document.getElementById('prod-section'); if(pS) pS.innerHTML = sections.map(s => `<option value="${s.id}">${s.name}</option>`).join(''); }
 
         window.createSection = async () => { const n = document.getElementById('section-name').value.trim(); if (n) { const o = sections.length > 0 ? (sections[sections.length-1].order || sections.length) + 1 : 0; await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sections'), { name: n, order: o }); document.getElementById('section-name').value = ''; } };
         window.addBanner = async () => { const u = document.getElementById('banner-url').value.trim(), l = document.getElementById('banner-link').value.trim(), s = document.getElementById('banner-section').value; if (u) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'banners'), { url: u, link: l, sectionId: s }); document.getElementById('banner-url').value = ''; } };
-        window.addProduct = async () => { const n = document.getElementById('prod-name').value.trim(), p = parseFloat(document.getElementById('prod-price').value), d = document.getElementById('prod-desc').value.trim(), s = document.getElementById('prod-section').value, i = Array.from(document.querySelectorAll('.prod-img')).map(el => el.value.trim()).filter(v => v !== ""); if (n && !isNaN(p) && i.length > 0) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'products'), { name: n, price: p, description: d, sectionId: s, images: i }); document.querySelectorAll('.prod-img').forEach(el => el.value = ''); } };
+        window.addProduct = async () => { 
+            const n = document.getElementById('prod-name').value.trim(), 
+                  op = document.getElementById('prod-original-price').value,
+                  p = document.getElementById('prod-price').value, 
+                  d = document.getElementById('prod-desc').value.trim(), 
+                  s = document.getElementById('prod-section').value, 
+                  i = Array.from(document.querySelectorAll('.prod-img')).map(el => el.value.trim()).filter(v => v !== ""); 
+            if (n && p && i.length > 0) { 
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'products'), { name: n, originalPrice: op || null, price: p, description: d, sectionId: s, images: i }); 
+                showToast("Produto criado!");
+                document.querySelectorAll('.prod-img').forEach(el => el.value = '');
+            } 
+        };
+        window.addTestimonial = async () => {
+            const n = document.getElementById('test-name').value.trim(), 
+                  p = document.getElementById('test-photo').value.trim(),
+                  c = document.getElementById('test-comment').value.trim(),
+                  r = document.getElementById('test-rating').value;
+            if (n && c) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'testimonials'), { name: n, photoUrl: p, comment: c, rating: r });
+                document.getElementById('test-name').value = ''; document.getElementById('test-photo').value = ''; document.getElementById('test-comment').value = '';
+                showToast("Depoimento publicado! ❤️");
+            }
+        };
+
         window.deleteDocById = async (c, id) => { if (confirm("Remover?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, id)); };
 
-        window.toggleAdmin = () => { const o = document.getElementById('admin-overlay'), p = document.getElementById('admin-panel'); if (o.classList.contains('hidden')) { o.classList.remove('hidden'); setTimeout(() => p.classList.remove('translate-x-full'), 10); } else { p.classList.add('translate-x-full'); setTimeout(() => o.classList.add('hidden'), 300); } };
-        window.switchTab = (tab) => { document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden')); document.getElementById(`tab-${tab}`).classList.remove('hidden'); document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('border-b-2', 'border-brand-500', 'text-brand-500', 'font-bold'); b.classList.add('text-brand-600/70'); }); const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.innerText.toLowerCase().includes(tab.substring(0,3))); if (btn) { btn.classList.add('border-b-2', 'border-brand-500', 'text-brand-500', 'font-bold'); btn.classList.remove('text-brand-600/70'); } };
-        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.remove('translate-y-20', 'opacity-0'); setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000); }
+        window.toggleAdmin = () => { const o = document.getElementById('admin-overlay'), p = document.getElementById('admin-panel'); if(!o || !p) return; if (o.classList.contains('hidden')) { o.classList.remove('hidden'); setTimeout(() => p.classList.remove('translate-x-full'), 10); } else { p.classList.add('translate-x-full'); setTimeout(() => o.classList.add('hidden'), 300); } };
+        window.switchTab = (tab) => { document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden')); const t = document.getElementById(`tab-${tab}`); if(t) t.classList.remove('hidden'); document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('border-b-2', 'border-brand-500', 'text-brand-500', 'font-bold'); b.classList.add('text-brand-600/70'); }); const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.innerText.toLowerCase().includes(tab.substring(0,4))); if (btn) { btn.classList.add('border-b-2', 'border-brand-500', 'text-brand-500', 'font-bold'); btn.classList.remove('text-brand-600/70'); } };
+        function showToast(m) { const t = document.getElementById('toast'); if(t) { t.innerText = m; t.classList.remove('translate-y-20', 'opacity-0'); setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000); } }
 
         initApp();
     </script>

@@ -22,6 +22,9 @@
                             800: 'var(--bg-card)',
                             900: 'var(--bg-main)',
                         }
+                    },
+                    screens: {
+                        'xs': '400px',
                     }
                 }
             }
@@ -65,16 +68,14 @@
             z-index: 1;
         }
 
-        /* Melhoria na proporção do Banner para Mobile */
+        /* Banner ajustado para mostrar TUDO no mobile sem cortes */
         .banner-aspect {
             width: 100%;
-            object-fit: cover;
-            aspect-ratio: 16/9; /* No mobile fica mais alto */
-        }
-        @media (min-width: 768px) {
-            .banner-aspect {
-                aspect-ratio: 1920 / 340; /* No desktop volta ao normal */
-            }
+            height: auto;
+            display: block;
+            aspect-ratio: 1920 / 340; /* Mantém a proporção real para não cortar nada */
+            object-fit: contain; /* Garante que a imagem inteira apareça */
+            background-color: var(--bg-main);
         }
 
         .panel-transition {
@@ -167,7 +168,7 @@
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Grid de produtos mobile: 2 colunas */
+        /* Grid de produtos mobile: 2 colunas organizadas */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -203,22 +204,23 @@
 
         <nav class="glass-nav sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 h-16 md:h-20 flex items-center justify-between">
-                <div class="flex items-center gap-2 md:gap-4">
-                    <img id="logo-nav" src="https://i.ibb.co/zVr3Fk0c/logo.png" alt="Logo" class="h-10 md:h-14 w-auto">
-                    <h1 id="store-name-nav" class="text-sm md:text-xl font-bold tracking-tighter uppercase hidden sm:block text-brand-500">Loja do Corvo</h1>
+                <div class="flex items-center gap-2 md:gap-4 overflow-hidden">
+                    <img id="logo-nav" src="https://i.ibb.co/zVr3Fk0c/logo.png" alt="Logo" class="h-8 md:h-14 w-auto flex-shrink-0">
+                    <!-- Título agora visível em todas as telas com ajuste de tamanho -->
+                    <h1 id="store-name-nav" class="text-xs xs:text-sm md:text-xl font-bold tracking-tighter uppercase truncate text-brand-500">Loja do Corvo</h1>
                 </div>
                 
-                <div class="flex items-center gap-3 md:gap-6">
-                    <div id="top-delivery-badge" class="flex items-center gap-1 md:gap-2 text-[10px] md:text-xs font-bold text-brand-400 bg-ui-800 px-2 md:px-4 py-1 rounded-full border border-brand-600/30">
+                <div class="flex items-center gap-2 md:gap-6">
+                    <div id="top-delivery-badge" class="flex items-center gap-1 md:gap-2 text-[8px] xs:text-[10px] md:text-xs font-bold text-brand-400 bg-ui-800 px-2 md:px-4 py-1 rounded-full border border-brand-600/30">
                         <i id="top-delivery-icon" class="fas fa-truck-fast"></i>
-                        <span id="top-delivery-text" class="hidden xs:inline">VIP CURITIBA</span>
+                        <span id="top-delivery-text" class="hidden xs:inline">CURITIBA</span>
                     </div>
                     <button id="admin-btn" onclick="handleAdminClick()" class="text-brand-400 hover:text-brand-500 transition-colors">
-                        <i class="fas fa-user-shield text-lg md:text-xl"></i>
+                        <i class="fas fa-user-shield text-base md:text-xl"></i>
                     </button>
                     <button onclick="toggleCart()" class="relative text-brand-400 hover:text-brand-500 transition-colors">
-                        <i class="fas fa-shopping-bag text-lg md:text-xl"></i>
-                        <span id="cart-count" class="absolute -top-1.5 -right-1.5 bg-brand-500 text-black text-[9px] md:text-[10px] font-bold w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center">0</span>
+                        <i class="fas fa-shopping-bag text-base md:text-xl"></i>
+                        <span id="cart-count" class="absolute -top-1.5 -right-1.5 bg-brand-500 text-black text-[8px] md:text-[10px] font-bold w-3.5 h-3.5 md:w-4 md:h-4 rounded-full flex items-center justify-center">0</span>
                     </button>
                 </div>
             </div>
@@ -226,76 +228,76 @@
 
         <header id="main-banners-container" class="relative w-full bg-ui-800 overflow-hidden border-b border-brand-600/20 group">
             <div id="main-banners" class="carousel-container">
-                <div class="carousel-item w-full banner-aspect flex items-center justify-center text-brand-600/50 animate-pulse">Sincronizando...</div>
+                <div class="carousel-item w-full banner-aspect flex items-center justify-center text-brand-600/50 animate-pulse text-xs">Sincronizando...</div>
             </div>
-            <button onclick="scrollCarousel('main-banners', -1)" class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-black/40 text-brand-500 w-8 md:w-10 h-8 md:h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 z-20"><i class="fas fa-chevron-left text-xs md:text-base"></i></button>
-            <button onclick="scrollCarousel('main-banners', 1)" class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-black/40 text-brand-500 w-8 md:w-10 h-8 md:h-10 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 z-20"><i class="fas fa-chevron-right text-xs md:text-base"></i></button>
-            <div id="main-banners-nav" class="absolute bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 md:gap-2 z-10"></div>
+            <button onclick="scrollCarousel('main-banners', -1)" class="absolute left-1 md:left-4 top-1/2 -translate-y-1/2 bg-black/40 text-brand-500 w-7 md:w-10 h-7 md:h-10 rounded-full flex items-center justify-center opacity-100 md:opacity-0 group-hover:opacity-100 z-20 transition-opacity"><i class="fas fa-chevron-left text-[10px] md:text-base"></i></button>
+            <button onclick="scrollCarousel('main-banners', 1)" class="absolute right-1 md:right-4 top-1/2 -translate-y-1/2 bg-black/40 text-brand-500 w-7 md:w-10 h-7 md:h-10 rounded-full flex items-center justify-center opacity-100 md:opacity-0 group-hover:opacity-100 z-20 transition-opacity"><i class="fas fa-chevron-right text-[10px] md:text-base"></i></button>
+            <div id="main-banners-nav" class="absolute bottom-1 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-1 md:gap-2 z-10"></div>
         </header>
 
-        <section class="max-w-7xl mx-auto px-4 py-8 md:py-12 pb-4">
+        <section class="max-w-7xl mx-auto px-4 py-6 md:py-12 pb-4">
             <div id="badges-container" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6"></div>
         </section>
 
-        <section class="max-w-7xl mx-auto px-4 py-4 md:py-6 border-y border-brand-600/10 mb-6 sticky top-16 md:top-20 z-30 bg-ui-900/90 backdrop-blur-md">
-            <div class="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar" id="filter-bar">
-                <button class="bg-brand-500 text-black px-4 md:px-6 py-1.5 md:py-2 rounded-full font-bold text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap">Tudo</button>
+        <section class="max-w-7xl mx-auto px-4 py-3 md:py-6 border-y border-brand-600/10 mb-6 sticky top-16 md:top-20 z-30 bg-ui-900/90 backdrop-blur-md">
+            <div class="flex items-center gap-2 md:gap-3 overflow-x-auto pb-1 no-scrollbar" id="filter-bar">
+                <button class="bg-brand-500 text-black px-4 md:px-6 py-1.5 md:py-2 rounded-full font-bold text-[9px] md:text-xs uppercase tracking-widest whitespace-nowrap">Tudo</button>
             </div>
         </section>
 
-        <main id="store-content" class="max-w-7xl mx-auto px-3 md:px-4 pb-20 min-h-[400px]">
-            <div class="flex flex-col items-center justify-center py-20 text-brand-600/50">
-                <i class="fas fa-circle-notch fa-spin text-3xl mb-4"></i>
-                <p class="text-sm">Preparando vitrine...</p>
+        <main id="store-content" class="max-w-7xl mx-auto px-3 md:px-4 pb-20 min-h-[300px]">
+            <div class="flex flex-col items-center justify-center py-16 text-brand-600/50">
+                <i class="fas fa-circle-notch fa-spin text-2xl md:text-3xl mb-4"></i>
+                <p class="text-xs md:text-sm">Preparando vitrine...</p>
             </div>
         </main>
 
-        <footer class="bg-black py-12 md:py-16 border-t border-brand-600/20 relative z-10">
+        <footer class="bg-black py-10 md:py-16 border-t border-brand-600/20 relative z-10">
             <div class="max-w-7xl mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 text-center md:text-left mb-10">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center md:text-left mb-10">
                     <div class="space-y-4 md:space-y-6">
-                        <img id="logo-footer" src="https://i.ibb.co/zVr3Fk0c/logo.png" alt="Logo" class="h-16 md:h-20 mx-auto md:mx-0">
-                        <p id="footer-about" class="text-brand-600 text-xs md:text-sm leading-relaxed max-w-md mx-auto md:mx-0">Carregando nossa história...</p>
+                        <img id="logo-footer" src="https://i.ibb.co/zVr3Fk0c/logo.png" alt="Logo" class="h-14 md:h-20 mx-auto md:mx-0">
+                        <p id="footer-about" class="text-brand-600 text-[11px] md:text-sm leading-relaxed max-w-md mx-auto md:mx-0">Carregando nossa história...</p>
                     </div>
-                    <div class="space-y-4">
-                        <h4 class="text-brand-500 font-bold uppercase text-xs md:text-sm tracking-widest">Atalhos</h4>
-                        <ul class="text-brand-600 text-xs md:text-sm space-y-2">
+                    <div class="space-y-3 md:space-y-4">
+                        <h4 class="text-brand-500 font-bold uppercase text-[10px] md:text-sm tracking-widest">Atalhos</h4>
+                        <ul class="text-brand-600 text-[11px] md:text-sm space-y-2">
                             <li><a href="javascript:void(0)" onclick="setFilter('all')" class="hover:text-brand-400">Coleções</a></li>
                             <li><a id="footer-whatsapp-support" href="#" target="_blank" class="hover:text-brand-400">Atendimento VIP</a></li>
                             <li><a href="javascript:void(0)" onclick="toggleCart()" class="hover:text-brand-400">Minha Sacola</a></li>
                         </ul>
                     </div>
-                    <div class="space-y-4">
-                        <h4 class="text-brand-500 font-bold uppercase text-xs md:text-sm tracking-widest">Contato</h4>
-                        <p id="footer-phone-display" class="text-brand-400 font-bold text-base md:text-lg">(41) 99976-7744</p>
-                        <div class="flex justify-center md:justify-start gap-4 text-lg md:text-xl">
+                    <div class="space-y-3 md:space-y-4">
+                        <h4 class="text-brand-500 font-bold uppercase text-[10px] md:text-sm tracking-widest">Contato</h4>
+                        <p id="footer-phone-display" class="text-brand-400 font-bold text-sm md:text-lg">(41) 99976-7744</p>
+                        <div class="flex justify-center md:justify-start gap-4 text-base md:text-xl">
                             <a href="#" class="text-brand-600 hover:text-brand-400"><i class="fab fa-instagram"></i></a>
                             <a id="footer-whatsapp-icon" href="#" target="_blank" class="text-brand-600 hover:text-brand-400"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="pt-6 border-t border-brand-600/10 text-center">
-                    <p id="footer-copyright" class="text-brand-600/50 text-[10px] md:text-xs">© 2024 Loja do Corvo. Direitos reservados.</p>
+                    <p id="footer-copyright" class="text-brand-600/50 text-[9px] md:text-xs">© 2024 Loja do Corvo. Direitos reservados.</p>
                 </div>
             </div>
         </footer>
     </div>
 
-    <!-- Carrinho: Mais largo no mobile para facilitar -->
+    <!-- Carrinho -->
     <div id="cart-overlay" class="fixed inset-0 bg-black/80 z-50 hidden transition-opacity" onclick="toggleCart()"></div>
-    <div id="cart-panel" class="fixed top-0 right-0 w-full max-w-[320px] md:max-w-md h-full bg-ui-900 shadow-2xl z-[60] panel-transition translate-x-full flex flex-col border-l border-brand-600/30">
-        <div class="flex justify-between items-center p-5 md:p-6 border-b border-brand-600/20">
-            <h2 class="text-xl md:text-2xl font-bold text-brand-500">Sua Sacola</h2>
-            <button onclick="toggleCart()" class="text-brand-400"><i class="fas fa-times text-xl md:text-2xl"></i></button>
+    <div id="cart-panel" class="fixed top-0 right-0 w-[85%] md:w-full md:max-w-md h-full bg-ui-900 shadow-2xl z-[60] panel-transition translate-x-full flex flex-col border-l border-brand-600/30">
+        <div class="flex justify-between items-center p-4 md:p-6 border-b border-brand-600/20">
+            <h2 class="text-lg md:text-2xl font-bold text-brand-500">Sua Sacola</h2>
+            <button onclick="toggleCart()" class="text-brand-400"><i class="fas fa-times text-lg md:text-2xl"></i></button>
         </div>
         <div id="cart-items" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6"></div>
-        <div class="p-5 md:p-6 border-t border-brand-600/20 bg-ui-800">
+        <div class="p-4 md:p-6 border-t border-brand-600/20 bg-ui-800">
             <div class="flex justify-between items-center mb-4 md:mb-6">
-                <span class="text-brand-400 text-sm">Total:</span>
-                <span id="cart-total" class="text-xl md:text-2xl font-bold text-brand-500">R$ 0,00</span>
+                <span class="text-brand-400 text-xs md:text-sm">Total:</span>
+                <span id="cart-total" class="text-lg md:text-2xl font-bold text-brand-500">R$ 0,00</span>
             </div>
-            <button onclick="checkoutWhatsApp()" class="w-full bg-brand-500 text-black py-3 md:py-4 rounded-xl font-bold text-sm md:text-base flex items-center justify-center gap-2 shadow-lg">
-                <i class="fab fa-whatsapp text-lg"></i> FECHAR NO WHATSAPP
+            <button onclick="checkoutWhatsApp()" class="w-full bg-brand-500 text-black py-3 md:py-4 rounded-xl font-bold text-xs md:text-base flex items-center justify-center gap-2 shadow-lg">
+                <i class="fab fa-whatsapp text-base md:text-lg"></i> FECHAR NO WHATSAPP
             </button>
         </div>
     </div>
@@ -304,79 +306,77 @@
     <div id="login-modal" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-4">
         <div class="bg-ui-800 w-full max-w-sm p-6 md:p-8 rounded-2xl border border-brand-600/30 shadow-2xl relative">
             <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-brand-400"><i class="fas fa-times text-lg"></i></button>
-            <h2 class="text-xl md:text-2xl font-bold text-brand-500 mb-6 text-center">Admin Access</h2>
+            <h2 class="text-xl md:text-2xl font-bold text-brand-500 mb-6 text-center uppercase tracking-widest">Acesso</h2>
             <input type="email" id="admin-email" placeholder="E-mail" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-4 text-brand-400 text-sm outline-none">
             <input type="password" id="admin-password" placeholder="Senha" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-6 text-brand-400 text-sm outline-none">
-            <button onclick="loginAdmin()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold text-sm">Entrar</button>
+            <button onclick="loginAdmin()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold text-sm uppercase">Entrar</button>
         </div>
     </div>
 
-    <!-- Painel Admin: Full width no Mobile -->
+    <!-- Painel Admin -->
     <div id="admin-overlay" class="fixed inset-0 bg-black/80 z-50 hidden" onclick="toggleAdmin()"></div>
     <div id="admin-panel" class="fixed top-0 right-0 w-full md:max-w-2xl h-full bg-ui-900 shadow-2xl z-[60] panel-transition translate-x-full overflow-y-auto p-4 md:p-8 border-l border-brand-600/30 text-brand-400">
         <div class="flex justify-between items-center mb-6 md:mb-8">
             <h2 class="text-xl md:text-2xl font-bold text-brand-500">Painel</h2>
             <div class="flex gap-2">
-                <button onclick="logoutAdmin()" class="text-red-500 text-[10px] font-bold uppercase px-3 py-1.5 rounded-full border border-red-500/20">SAIR</button>
+                <button onclick="logoutAdmin()" class="text-red-500 text-[9px] font-bold uppercase px-3 py-1.5 rounded-full border border-red-500/20">SAIR</button>
                 <button onclick="toggleAdmin()" class="text-brand-400"><i class="fas fa-times text-xl"></i></button>
             </div>
         </div>
 
         <div class="flex border-b border-brand-600/30 mb-6 overflow-x-auto no-scrollbar gap-2">
-            <button onclick="switchTab('sections')" class="tab-btn whitespace-nowrap px-4 py-2 border-b-2 border-brand-500 font-bold text-brand-500 text-xs md:text-sm">Seções</button>
-            <button onclick="switchTab('banners')" class="tab-btn whitespace-nowrap px-4 py-2 text-brand-600/70 text-xs md:text-sm">Banners</button>
-            <button onclick="switchTab('products')" class="tab-btn whitespace-nowrap px-4 py-2 text-brand-600/70 text-xs md:text-sm">Produtos</button>
-            <button onclick="switchTab('site')" class="tab-btn whitespace-nowrap px-4 py-2 text-brand-600/70 text-xs md:text-sm">Site</button>
+            <button onclick="switchTab('sections')" class="tab-btn whitespace-nowrap px-3 py-2 border-b-2 border-brand-500 font-bold text-brand-500 text-[10px] md:text-sm uppercase">Seções</button>
+            <button onclick="switchTab('banners')" class="tab-btn whitespace-nowrap px-3 py-2 text-brand-600/70 text-[10px] md:text-sm uppercase">Banners</button>
+            <button onclick="switchTab('products')" class="tab-btn whitespace-nowrap px-3 py-2 text-brand-600/70 text-[10px] md:text-sm uppercase">Produtos</button>
+            <button onclick="switchTab('site')" class="tab-btn whitespace-nowrap px-3 py-2 text-brand-600/70 text-[10px] md:text-sm uppercase">Site</button>
         </div>
 
         <div id="tab-sections" class="tab-content">
-            <div class="bg-ui-800 p-4 md:p-6 rounded-xl mb-6 border border-brand-600/20">
+            <div class="bg-ui-800 p-4 rounded-xl mb-6 border border-brand-600/20">
                 <div class="flex gap-2">
-                    <input type="text" id="section-name" placeholder="Nome" class="flex-1 bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-sm outline-none">
-                    <button onclick="createSection()" class="bg-brand-500 text-black px-4 py-2.5 rounded-xl font-bold text-xs uppercase">ADD</button>
+                    <input type="text" id="section-name" placeholder="Nome" class="flex-1 bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs outline-none">
+                    <button onclick="createSection()" class="bg-brand-500 text-black px-4 py-2.5 rounded-xl font-bold text-[10px] uppercase">ADD</button>
                 </div>
             </div>
             <div id="admin-sections-list" class="space-y-2.5"></div>
         </div>
 
         <div id="tab-banners" class="tab-content hidden">
-            <div class="bg-ui-800 p-4 md:p-6 rounded-xl mb-6 border border-brand-600/20">
-                <input type="text" id="banner-url" placeholder="URL Imagem" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-xs outline-none">
-                <input type="text" id="banner-link" placeholder="Link Destino" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-xs outline-none">
-                <select id="banner-section" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-4 text-brand-400 text-xs outline-none"></select>
-                <button onclick="addBanner()" class="w-full bg-brand-500 text-black py-2.5 rounded-xl font-bold text-xs uppercase">Salvar Banner</button>
+            <div class="bg-ui-800 p-4 rounded-xl mb-6 border border-brand-600/20">
+                <input type="text" id="banner-url" placeholder="URL Imagem" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none">
+                <input type="text" id="banner-link" placeholder="Link Destino" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none">
+                <select id="banner-section" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-4 text-brand-400 text-[10px] outline-none"></select>
+                <button onclick="addBanner()" class="w-full bg-brand-500 text-black py-2.5 rounded-xl font-bold text-[10px] uppercase">Salvar Banner</button>
             </div>
             <div id="admin-banners-list" class="grid grid-cols-1 gap-4"></div>
         </div>
 
         <div id="tab-products" class="tab-content hidden">
-            <div class="bg-ui-800 p-4 md:p-6 rounded-xl mb-6 border border-brand-600/20">
-                <input type="text" id="prod-name" placeholder="Nome" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-xs outline-none">
-                <input type="number" id="prod-price" placeholder="Preço" step="0.01" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-xs outline-none">
-                <textarea id="prod-desc" placeholder="Descrição" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-xs outline-none" rows="2"></textarea>
-                <select id="prod-section" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-4 text-brand-400 text-xs outline-none"></select>
+            <div class="bg-ui-800 p-4 rounded-xl mb-6 border border-brand-600/20">
+                <input type="text" id="prod-name" placeholder="Nome" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none">
+                <input type="number" id="prod-price" placeholder="Preço" step="0.01" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none">
+                <textarea id="prod-desc" placeholder="Descrição" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-3 text-brand-400 text-[10px] outline-none" rows="2"></textarea>
+                <select id="prod-section" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl mb-4 text-brand-400 text-[10px] outline-none"></select>
                 <div class="grid grid-cols-2 gap-2 mb-4">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] outline-none" placeholder="Img 1">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] outline-none" placeholder="Img 2">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] outline-none" placeholder="Img 3">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] outline-none" placeholder="Img 4">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] outline-none" placeholder="Img 5">
-                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[10px] outline-none" placeholder="Img 6">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 1">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 2">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 3">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 4">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 5">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-[8px] outline-none" placeholder="Img 6">
                 </div>
-                <button onclick="addProduct()" class="w-full bg-brand-500 text-black py-2.5 rounded-xl font-bold text-xs uppercase">Cadastrar</button>
+                <button onclick="addProduct()" class="w-full bg-brand-500 text-black py-2.5 rounded-xl font-bold text-[10px] uppercase">Cadastrar</button>
             </div>
             <div id="admin-products-list" class="space-y-3"></div>
         </div>
 
         <div id="tab-site" class="tab-content hidden">
-            <div class="bg-ui-800 p-4 md:p-6 rounded-xl border border-brand-600/20 space-y-4">
-                <input type="text" id="set-store-name" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs outline-none" placeholder="Nome da Loja">
-                <input type="text" id="set-whatsapp" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs outline-none" placeholder="WhatsApp (55...)">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <input type="text" id="set-logo" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="URL Logo">
-                    <input type="text" id="set-favicon" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="URL Favicon">
-                </div>
-                <select id="set-theme" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs outline-none">
+            <div class="bg-ui-800 p-4 rounded-xl border border-brand-600/20 space-y-4">
+                <input type="text" id="set-store-name" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="Nome da Loja">
+                <input type="text" id="set-whatsapp" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="WhatsApp (55...)">
+                <input type="text" id="set-logo" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="URL Logo">
+                <input type="text" id="set-favicon" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" placeholder="URL Favicon">
+                <select id="set-theme" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none">
                     <option value="luxury">Luxury Gold</option>
                     <option value="winter">Winter</option>
                     <option value="summer">Summer</option>
@@ -387,21 +387,21 @@
                     <option value="valentines">Valentines</option>
                     <option value="halloween">Halloween</option>
                 </select>
-                <textarea id="set-about" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs outline-none" rows="2" placeholder="Sobre nós..."></textarea>
-                <textarea id="set-ticker" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-xs outline-none" rows="2" placeholder="Comunicado topo..."></textarea>
+                <textarea id="set-about" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" rows="2" placeholder="Sobre nós..."></textarea>
+                <textarea id="set-ticker" class="w-full bg-ui-900 border border-brand-600/30 p-2.5 rounded-xl text-brand-400 text-[10px] outline-none" rows="2" placeholder="Comunicado..."></textarea>
                 <div class="grid grid-cols-2 gap-2">
-                    <input type="text" id="set-delivery" class="bg-ui-900 border border-brand-600/30 p-2 rounded-xl text-brand-400 text-[10px]" placeholder="Badge">
-                    <input type="text" id="set-delivery-icon" class="bg-ui-900 border border-brand-600/30 p-2 rounded-xl text-brand-400 text-[10px]" placeholder="Ícone FA">
+                    <input type="text" id="set-delivery" class="bg-ui-900 border border-brand-600/30 p-2 rounded-xl text-brand-400 text-[9px]" placeholder="Badge">
+                    <input type="text" id="set-delivery-icon" class="bg-ui-900 border border-brand-600/30 p-2 rounded-xl text-brand-400 text-[9px]" placeholder="Ícone FA">
                 </div>
                 <div id="admin-badges-edit" class="space-y-2"></div>
-                <button onclick="saveSiteSettings()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold text-xs uppercase shadow-lg">SALVAR TUDO</button>
+                <button onclick="saveSiteSettings()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold text-[10px] uppercase">SALVAR TUDO</button>
             </div>
         </div>
     </div>
 
-    <!-- Product Detail Modal -->
+    <!-- Modal Detalhe Produto -->
     <div id="product-modal" class="fixed inset-0 bg-black/80 z-[80] hidden flex items-center justify-center p-2 md:p-4">
-        <div class="bg-ui-800 w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-2xl relative p-4 md:p-10 border border-brand-600/30 shadow-2xl">
+        <div class="bg-ui-800 w-full max-w-5xl max-h-[95vh] overflow-y-auto rounded-2xl relative p-4 md:p-10 border border-brand-600/30 shadow-2xl">
             <button onclick="closeProductModal()" class="absolute top-2 right-2 md:top-4 md:right-4 text-brand-400 z-20 bg-black/50 p-2 rounded-full"><i class="fas fa-times text-xl"></i></button>
             <div id="modal-content" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10"></div>
         </div>
@@ -596,7 +596,7 @@
 
         window.saveSiteSettings = async () => {
             if (!isAdmin) return;
-            const b = []; const inputs = document.querySelectorAll('.badge-input');
+            const b = [];
             for(let i=0; i<4; i++) {
                 b.push({
                     id: i+1,
@@ -612,10 +612,10 @@
 
         window.scrollCarousel = (id, dir) => { const c = document.getElementById(id); c.scrollBy({left: c.offsetWidth * dir, behavior: 'smooth'}); };
         function formatCurrency(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
-        function renderBannerItem(b) { const content = `<img src="${b.url}" class="w-full banner-aspect" alt="Banner">`; return b.link ? `<a href="${b.link}" target="_blank" class="block w-full">${content}</a>` : content; }
+        function renderBannerItem(b) { const content = `<img src="${b.url}" class="banner-aspect" alt="Banner">`; return b.link ? `<a href="${b.link}" target="_blank" class="block w-full">${content}</a>` : content; }
 
         function renderCarousel(bannersList, containerId, navId) {
-            if (bannersList.length === 0) return `<div class="w-full banner-aspect bg-ui-900 flex items-center justify-center text-brand-600/50 font-bold uppercase text-[10px] md:text-sm">Vitrine ${siteSettings.storeName}</div>`;
+            if (bannersList.length === 0) return `<div class="w-full banner-aspect flex items-center justify-center text-brand-600/50 font-bold uppercase text-[10px] md:text-sm">Vitrine ${siteSettings.storeName}</div>`;
             if (bannersList.length === 1) return renderBannerItem(bannersList[0]);
             const carouselId = `carousel-${containerId}`;
             const slides = bannersList.map((b, idx) => `<div class="carousel-item" id="${carouselId}-slide-${idx}">${renderBannerItem(b)}</div>`).join('');
@@ -625,12 +625,12 @@
         }
 
         window.setFilter = (filter) => { currentFilter = filter; renderFilters(); renderStore(); window.scrollTo({ top: document.getElementById('store-content').offsetTop - 120, behavior: 'smooth' }); };
-        function renderFilters() { const bar = document.getElementById('filter-bar'); let h = `<button onclick="setFilter('all')" class="${currentFilter === 'all' ? 'bg-brand-500 text-black shadow-lg shadow-brand-500/20' : 'bg-ui-800 text-brand-400 border border-brand-600/20'} px-5 py-1.5 rounded-full font-bold text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap transition-all">Ver Tudo</button>`; sections.forEach(s => { const active = currentFilter === s.id; h += `<button onclick="setFilter('${s.id}')" class="${active ? 'bg-brand-500 text-black' : 'bg-ui-800 text-brand-400 border border-brand-600/20'} px-5 py-1.5 rounded-full font-bold text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap transition-all">${s.name}</button>`; }); bar.innerHTML = h; }
+        function renderFilters() { const bar = document.getElementById('filter-bar'); let h = `<button onclick="setFilter('all')" class="${currentFilter === 'all' ? 'bg-brand-500 text-black shadow-lg shadow-brand-500/20' : 'bg-ui-800 text-brand-400 border border-brand-600/20'} px-5 py-1.5 rounded-full font-bold text-[9px] md:text-xs uppercase tracking-widest whitespace-nowrap transition-all">Ver Tudo</button>`; sections.forEach(s => { const active = currentFilter === s.id; h += `<button onclick="setFilter('${s.id}')" class="${active ? 'bg-brand-500 text-black' : 'bg-ui-800 text-brand-400 border border-brand-600/20'} px-5 py-1.5 rounded-full font-bold text-[9px] md:text-xs uppercase tracking-widest whitespace-nowrap transition-all">${s.name}</button>`; }); bar.innerHTML = h; }
 
         function renderStore() {
             const content = document.getElementById('store-content');
             document.getElementById('main-banners').innerHTML = renderCarousel(banners.filter(b => b.sectionId === 'header'), 'header-main', 'main-banners-nav');
-            if (sections.length === 0) { content.innerHTML = `<div class="text-center py-20 text-brand-600/50"><p>Carregando Coleções...</p></div>`; return; }
+            if (sections.length === 0) { content.innerHTML = `<div class="text-center py-20 text-brand-600/50 text-xs md:text-sm"><p>Carregando Coleções...</p></div>`; return; }
             let h = '';
             sections.forEach(section => {
                 if (currentFilter !== 'all' && section.id !== currentFilter) return;
@@ -639,23 +639,22 @@
                 h += `
                     <div class="mt-8 md:mt-16 animate-in fade-in duration-700">
                         <div class="mb-6 md:mb-10">${sb.length > 0 ? renderCarousel(sb, `section-${section.id}`, null) : ''}</div>
-                        <div class="flex items-center justify-between mb-6 md:mb-10 sticky top-32 md:top-36 z-20 bg-ui-900/80 backdrop-blur-md py-3 md:py-4 border-b border-brand-600/20">
-                            <h2 class="text-xl md:text-3xl font-bold text-brand-500 uppercase tracking-tighter">${section.name}</h2>
+                        <div class="flex items-center justify-between mb-6 md:mb-10 sticky top-28 md:top-36 z-20 bg-ui-900/80 backdrop-blur-md py-3 md:py-4 border-b border-brand-600/20">
+                            <h2 class="text-base md:text-3xl font-bold text-brand-500 uppercase tracking-tighter">${section.name}</h2>
                         </div>
                         <div class="products-grid">
                             ${sp.map(p => `
                                 <div class="product-card group bg-ui-800/60 backdrop-blur-sm rounded-xl md:rounded-2xl overflow-hidden border border-brand-600/20 shadow-lg relative transition-all duration-500">
                                     <div class="aspect-square md:aspect-[4/5] bg-ui-900 relative overflow-hidden">
-                                        <img src="${p.images[0]}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                        <img src="${p.images[0]}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onclick="viewProduct('${p.id}')">
                                         <div class="product-actions absolute inset-0 bg-black/40 opacity-0 flex flex-col items-center justify-end p-4 transition-opacity hidden md:flex">
                                             <button onclick="viewProduct('${p.id}')" class="w-full bg-brand-500 text-black py-2 rounded-xl font-bold text-xs shadow-lg">Ver Detalhes</button>
                                         </div>
-                                        <button onclick="viewProduct('${p.id}')" class="md:hidden absolute inset-0 z-0"></button>
-                                        <button onclick="addToCart('${p.id}')" class="absolute top-2 right-2 md:top-4 md:right-4 bg-brand-500 text-black p-2 md:p-3 rounded-full shadow-lg z-10"><i class="fas fa-shopping-bag text-xs md:text-base"></i></button>
+                                        <button onclick="addToCart('${p.id}')" class="absolute top-2 right-2 md:top-4 md:right-4 bg-brand-500 text-black p-2 md:p-3 rounded-full shadow-lg z-10"><i class="fas fa-shopping-bag text-[10px] md:text-base"></i></button>
                                     </div>
-                                    <div class="p-3 md:p-6">
-                                        <h3 class="font-bold text-xs md:text-lg mb-1 md:mb-2 text-brand-400 line-clamp-1">${p.name}</h3>
-                                        <span class="text-sm md:text-2xl font-black text-brand-500">${formatCurrency(p.price)}</span>
+                                    <div class="p-3 md:p-6" onclick="viewProduct('${p.id}')">
+                                        <h3 class="font-bold text-[10px] md:text-lg mb-1 md:mb-2 text-brand-400 line-clamp-1">${p.name}</h3>
+                                        <span class="text-xs md:text-2xl font-black text-brand-500">${formatCurrency(p.price)}</span>
                                     </div>
                                 </div>
                             `).join('')}
@@ -676,10 +675,10 @@
                     </div>
                 </div>
                 <div class="flex flex-col justify-center">
-                    <h2 class="text-2xl md:text-4xl font-black mb-2 md:mb-4 text-brand-500 leading-tight">${p.name}</h2>
-                    <span class="text-xl md:text-3xl font-black text-brand-400 mb-6 md:mb-8">${formatCurrency(p.price)}</span>
-                    <p class="text-brand-600/80 leading-relaxed mb-8 md:mb-10 text-xs md:text-sm">${p.description}</p>
-                    <button onclick="addToCart('${p.id}'); closeProductModal();" class="w-full bg-brand-500 text-black py-4 md:py-5 rounded-xl font-bold text-sm md:text-lg shadow-lg">ADICIONAR À SACOLA</button>
+                    <h2 class="text-xl md:text-4xl font-black mb-2 md:mb-4 text-brand-500 leading-tight">${p.name}</h2>
+                    <span class="text-lg md:text-3xl font-black text-brand-400 mb-6 md:mb-8">${formatCurrency(p.price)}</span>
+                    <p class="text-brand-600/80 leading-relaxed mb-8 md:mb-10 text-[10px] md:text-sm">${p.description}</p>
+                    <button onclick="addToCart('${p.id}'); closeProductModal();" class="w-full bg-brand-500 text-black py-3.5 md:py-5 rounded-xl font-bold text-xs md:text-lg shadow-lg">ADICIONAR À SACOLA</button>
                 </div>
             `;
             document.getElementById('product-modal').classList.remove('hidden');
@@ -697,12 +696,12 @@
         };
 
         function renderCartItems() {
-            const c = document.getElementById('cart-items'); if (cart.length === 0) { c.innerHTML = `<p class="text-center text-brand-600/50 py-10 text-sm">Sua sacola está vazia.</p>`; return; }
+            const c = document.getElementById('cart-items'); if (cart.length === 0) { c.innerHTML = `<p class="text-center text-brand-600/50 py-10 text-xs">Sua sacola está vazia.</p>`; return; }
             c.innerHTML = cart.map((i, idx) => `
-                <div class="flex gap-3 md:gap-4 bg-ui-800 p-3 md:p-4 rounded-xl border border-brand-600/20 relative backdrop-blur-md">
-                    <img src="${i.images[0]}" class="w-12 h-16 md:w-16 md:h-20 object-cover rounded-lg">
-                    <div class="flex-1"><h4 class="font-bold text-brand-400 text-xs md:text-sm line-clamp-1">${i.name}</h4><p class="text-brand-500 font-bold text-[10px] md:text-xs">${formatCurrency(i.price)}</p></div>
-                    <button onclick="removeFromCart(${idx})" class="absolute top-2 right-2 text-brand-600/50"><i class="fas fa-trash-alt text-xs"></i></button>
+                <div class="flex gap-3 bg-ui-800 p-3 rounded-xl border border-brand-600/20 relative backdrop-blur-md">
+                    <img src="${i.images[0]}" class="w-12 h-16 object-cover rounded-lg">
+                    <div class="flex-1"><h4 class="font-bold text-brand-400 text-xs line-clamp-1">${i.name}</h4><p class="text-brand-500 font-bold text-[10px]">${formatCurrency(i.price)}</p></div>
+                    <button onclick="removeFromCart(${idx})" class="absolute top-2 right-2 text-brand-600/50 hover:text-red-500 transition-colors"><i class="fas fa-trash-alt text-xs"></i></button>
                 </div>
             `).join('');
         }
@@ -727,21 +726,21 @@
 
         function renderAdminSections() { 
             document.getElementById('admin-sections-list').innerHTML = sections.map((s, idx) => `
-                <div class="flex justify-between items-center p-3 md:p-4 bg-ui-900 border border-brand-600/20 rounded-xl">
-                    <div class="flex items-center gap-3">
-                        <div class="flex flex-col gap-1">
-                            <button onclick="moveSection('${s.id}', -1)" class="text-brand-600 p-0.5 ${idx === 0 ? 'opacity-20' : ''}"><i class="fas fa-chevron-up text-[10px]"></i></button>
-                            <button onclick="moveSection('${s.id}', 1)" class="text-brand-600 p-0.5 ${idx === sections.length-1 ? 'opacity-20' : ''}"><i class="fas fa-chevron-down text-[10px]"></i></button>
+                <div class="flex justify-between items-center p-3 bg-ui-900 border border-brand-600/20 rounded-xl">
+                    <div class="flex items-center gap-2">
+                        <div class="flex flex-col gap-0.5">
+                            <button onclick="moveSection('${s.id}', -1)" class="text-brand-600 p-0.5 ${idx === 0 ? 'opacity-20' : ''}"><i class="fas fa-chevron-up text-[8px]"></i></button>
+                            <button onclick="moveSection('${s.id}', 1)" class="text-brand-600 p-0.5 ${idx === sections.length-1 ? 'opacity-20' : ''}"><i class="fas fa-chevron-down text-[8px]"></i></button>
                         </div>
-                        <span class="font-bold text-xs text-brand-400">${s.name}</span>
+                        <span class="font-bold text-[10px] text-brand-400">${s.name}</span>
                     </div>
-                    <button onclick="deleteDocById('sections', '${s.id}')" class="text-red-500"><i class="fas fa-trash text-xs"></i></button>
+                    <button onclick="deleteDocById('sections', '${s.id}')" class="text-red-500"><i class="fas fa-trash text-[10px]"></i></button>
                 </div>
             `).join(''); 
         }
 
-        function renderAdminBanners() { document.getElementById('admin-banners-list').innerHTML = banners.map(b => `<div class="bg-ui-900 border border-brand-600/20 rounded-xl p-2 group"><img src="${b.url}" class="h-12 w-full object-cover rounded mb-2 grayscale"><div class="flex justify-between text-[8px] uppercase font-black text-brand-600"><span>${b.sectionId === 'header' ? 'Topo' : sections.find(s => s.id === b.sectionId)?.name}</span><button onclick="deleteDocById('banners', '${b.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div></div>`).join(''); }
-        function renderAdminProducts() { document.getElementById('admin-products-list').innerHTML = products.map(p => `<div class="flex gap-3 bg-ui-900 border border-brand-600/20 rounded-xl p-2 items-center"><img src="${p.images[0]}" class="h-8 w-8 object-cover rounded"><h4 class="font-bold text-[10px] text-brand-400 flex-1 line-clamp-1">${p.name}</h4><button onclick="deleteDocById('products', '${p.id}')" class="text-red-500"><i class="fas fa-trash text-[10px]"></i></button></div>`).join(''); }
+        function renderAdminBanners() { document.getElementById('admin-banners-list').innerHTML = banners.map(b => `<div class="bg-ui-900 border border-brand-600/20 rounded-xl p-2 group"><img src="${b.url}" class="h-10 w-full object-contain bg-black rounded mb-2"><div class="flex justify-between text-[7px] uppercase font-black text-brand-600"><span>${b.sectionId === 'header' ? 'Topo' : sections.find(s => s.id === b.sectionId)?.name}</span><button onclick="deleteDocById('banners', '${b.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div></div>`).join(''); }
+        function renderAdminProducts() { document.getElementById('admin-products-list').innerHTML = products.map(p => `<div class="flex gap-2 bg-ui-900 border border-brand-600/20 rounded-xl p-2 items-center"><img src="${p.images[0]}" class="h-8 w-8 object-cover rounded"><h4 class="font-bold text-[9px] text-brand-400 flex-1 line-clamp-1">${p.name}</h4><button onclick="deleteDocById('products', '${p.id}')" class="text-red-500"><i class="fas fa-trash text-[9px]"></i></button></div>`).join(''); }
         function updateSelects() { const opts = `<option value="header">Topo</option>` + sections.map(s => `<option value="${s.id}">${s.name}</option>`).join(''); document.getElementById('banner-section').innerHTML = opts; document.getElementById('prod-section').innerHTML = sections.map(s => `<option value="${s.id}">${s.name}</option>`).join(''); }
 
         window.createSection = async () => { const n = document.getElementById('section-name').value.trim(); if (n) { const o = sections.length > 0 ? (sections[sections.length-1].order || sections.length) + 1 : 0; await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sections'), { name: n, order: o }); document.getElementById('section-name').value = ''; } };

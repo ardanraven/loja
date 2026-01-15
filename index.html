@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Loja do Corvo - Luxury Ecommerce</title>
+    <!-- Favicon Dinâmico -->
+    <link id="site-favicon" rel="icon" href="https://i.ibb.co/zVr3Fk0c/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            400: 'var(--brand-400)',
+                            500: 'var(--brand-500)',
+                            600: 'var(--brand-600)',
+                        },
+                        ui: {
+                            800: 'var(--bg-card)',
+                            900: 'var(--bg-main)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --brand-400: #e5c07b;
+            --brand-500: #d4af37;
+            --brand-600: #b5942f;
+            --bg-main: #111111;
+            --bg-card: #1a1a1a;
+            --text-on-brand: #000000;
+            --theme-decoration: ""; /* Emoji decoration */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--brand-400);
+            overflow-x: hidden;
+            transition: background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
+        }
+
+        /* Canvas de Efeitos */
+        #effects-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .relative-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner-aspect {
+            aspect-ratio: 1920 / 340;
+            object-fit: cover;
+        }
+
+        .panel-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .glass-nav {
+            background: rgba(var(--nav-bg-rgb, 17, 17, 17), 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Card Decoration - Agora no canto inferior direito */
+        .product-card::after {
+            content: var(--theme-decoration);
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0.4;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .product-card:hover::after {
+            transform: scale(1.4) rotate(-10deg);
+            opacity: 1;
+            bottom: 20px;
+        }
+
+        .product-card:hover .product-actions {
+            opacity: 1;
+        }
+
+        /* Carousel Styles */
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .carousel-container::-webkit-scrollbar { display: none; }
+        .carousel-item {
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        /* News Ticker */
+        .ticker-wrapper {
+            background: var(--brand-500);
+            color: var(--text-on-brand);
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 50;
+        }
+        .ticker-content {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+            padding-left: 100%;
+        }
+        @keyframes ticker {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            z-index: 100;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .whatsapp-float:hover { transform: scale(1.15) rotate(10deg); }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: var(--brand-500); border-radius: 10px; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .fade-theme { animation: fadeTheme 0.8s ease-in-out; }
+        @keyframes fadeTheme { from { opacity: 0.5; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="text-brand-400">
+
+    <!-- Fundo de Partículas -->
+    <canvas id="effects-canvas"></canvas>
+
+    <div class="relative-content">
+        <!-- News Ticker -->
+        <div class="ticker-wrapper">
+            <div id="site-ticker" class="ticker-content">
+                Bem-vindo à Loja do Corvo - Exclusividade em cada detalhe...
+            </div>
+        </div>
+
+        <!-- Toast Messages -->
+        <div id="toast" class="fixed bottom-5 right-5 z-[100] transform translate-y-20 opacity-0 transition-all duration-300 bg-brand-500 text-black font-bold px-6 py-3 rounded-lg shadow-xl shadow-brand-500/20"></div>
+
+        <!-- WhatsApp Floating Button -->
+        <a id="whatsapp-floating-btn" href="#" target="_blank" class="whatsapp-float">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+
+        <!-- Navigation -->
+        <nav class="glass-nav sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <img id="logo-nav" src="https://i.ibb.co/zVr3Fk0c/logo.png" alt="Logo" class="h-14 w-auto">
+                    <h1 id="store-name-nav" class="text-xl font-bold tracking-tighter uppercase hidden md:block text-brand-500">Loja do Corvo</h1>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <div id="top-delivery-badge" class="hidden md:flex items-center gap-2 text-xs font-bold text-brand-400 bg-ui-800 px-4 py-1.5 rounded-full border border-brand-600/30">
+                        <i id="top-delivery-icon" class="fas fa-truck-fast"></i>
+                        <span id="top-delivery-text">ENTREGA VIP EM CURITIBA</span>
+                    </div>
+                    <button id="admin-btn" onclick="handleAdminClick()" class="text-brand-400 hover:text-brand-500 transition-colors">
+                        <i class="fas fa-user-shield text-xl"></i>
+                    </button>
+                    <button onclick="toggleCart()" class="relative text-brand-400 hover:text-brand-500 transition-colors">
+                        <i class="fas fa-shopping-bag text-xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-brand-500 text-black text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm">0</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Header Banners -->
+        <header id="main-banners-container" class="relative w-full bg-ui-800 overflow-hidden border-b border-brand-600/20 group">
+            <div id="main-banners-wrapper" class="relative w-full">
+                <div id="main-banners" class="carousel-container">
+                    <div class="carousel-item w-full banner-aspect flex items-center justify-center text-brand-600/50 animate-pulse">
+                        Sincronizando destaques...
+                    </div>
+                </div>
+                <button onclick="scrollCarousel('main-banners', -1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-brand-500 hover:text-black text-brand-500 w-10 h-10 rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 z-20">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button onclick="scrollCarousel('main-banners', 1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-brand-500 hover:text-black text-brand-500 w-10 h-10 rounded-full flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 z-20">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div id="main-banners-nav" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10"></div>
+        </header>
+
+        <!-- Trusted Badges -->
+        <section class="max-w-7xl mx-auto px-4 py-12 pb-6">
+            <div id="badges-container" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+        </section>
+
+        <!-- Category Filter -->
+        <section class="max-w-7xl mx-auto px-4 py-6 border-y border-brand-600/10 mb-8 sticky top-20 z-30 bg-ui-900/90 backdrop-blur-md">
+            <div class="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-hide no-scrollbar" id="filter-bar">
+                <button class="bg-brand-500 text-black px-6 py-2 rounded-full font-bold text-xs uppercase tracking-widest whitespace-nowrap">Ver Tudo</button>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <main id="store-content" class="max-w-7xl mx-auto px-4 pb-20 min-h-[400px]">
+            <div class="flex flex-col items-center justify-center py-20 text-brand-600/50">
+                <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
+                <p>Preparando a vitrine...</p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-black py-16 border-t border-brand-600/20 relative z-10">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid md:grid-cols-3 gap-12 text-center md:text-left mb-12">
+                    <div class="space-y-6">
+                        <img id="logo-footer" src="https://i.ibb.co/zVr3Fk0c/logo.png" alt="Logo" class="h-20 mx-auto md:mx-0">
+                        <p id="footer-about" class="text-brand-600 text-sm leading-relaxed">
+                            Carregando nossa história...
+                        </p>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-brand-500 font-bold uppercase tracking-widest">Links Úteis</h4>
+                        <ul class="text-brand-600 text-sm space-y-2">
+                            <li><a href="javascript:void(0)" onclick="setFilter('all')" class="hover:text-brand-400 transition-colors">Ver Coleções</a></li>
+                            <li><a id="footer-whatsapp-support" href="#" target="_blank" class="hover:text-brand-400 transition-colors">Atendimento VIP</a></li>
+                            <li><a href="javascript:void(0)" onclick="toggleCart()" class="hover:text-brand-400 transition-colors">Minha Sacola</a></li>
+                        </ul>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="text-brand-500 font-bold uppercase tracking-widest">Contato</h4>
+                        <p class="text-brand-600 text-sm">Curitiba, Paraná - Brasil</p>
+                        <p id="footer-phone-display" class="text-brand-400 font-bold text-lg">(41) 99976-7744</p>
+                        <div class="flex justify-center md:justify-start gap-4">
+                            <a href="#" class="text-brand-600 hover:text-brand-400 transition-all text-xl"><i class="fab fa-instagram"></i></a>
+                            <a id="footer-whatsapp-icon" href="#" target="_blank" class="text-brand-600 hover:text-brand-400 transition-all text-xl"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-8 border-t border-brand-600/10 text-center">
+                    <p id="footer-copyright" class="text-brand-600/50 text-xs mb-2">© 2024 Loja do Corvo. Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/80 z-50 hidden transition-opacity" onclick="toggleCart()"></div>
+    <div id="cart-panel" class="fixed top-0 right-0 w-full max-w-md h-full bg-ui-900 shadow-2xl z-[60] panel-transition translate-x-full flex flex-col border-l border-brand-600/30">
+        <div class="flex justify-between items-center p-6 border-b border-brand-600/20">
+            <h2 class="text-2xl font-bold text-brand-500">Sua Sacola</h2>
+            <button onclick="toggleCart()" class="text-brand-400 hover:text-brand-500"><i class="fas fa-times text-2xl"></i></button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-6"></div>
+        <div class="p-6 border-t border-brand-600/20 bg-ui-800">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-brand-400">Total Estimado:</span>
+                <span id="cart-total" class="text-2xl font-bold text-brand-500">R$ 0,00</span>
+            </div>
+            <button onclick="checkoutWhatsApp()" class="w-full bg-brand-500 text-black py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-brand-400 transition-colors shadow-lg">
+                <i class="fab fa-whatsapp text-xl"></i> FINALIZAR NO WHATSAPP
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-black/80 z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-ui-800 w-full max-w-md p-8 rounded-2xl border border-brand-600/30 shadow-2xl relative">
+            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-brand-400 hover:text-brand-500"><i class="fas fa-times text-xl"></i></button>
+            <h2 class="text-2xl font-bold text-brand-500 mb-6 text-center text-brand-500">Acesso Restrito</h2>
+            <input type="email" id="admin-email" placeholder="E-mail" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-4 text-brand-400 outline-none focus:border-brand-500 transition-colors">
+            <input type="password" id="admin-password" placeholder="Senha" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-6 text-brand-400 outline-none focus:border-brand-500 transition-colors">
+            <button onclick="loginAdmin()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold hover:bg-brand-400 transition-all">Entrar</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-overlay" class="fixed inset-0 bg-black/80 z-50 hidden" onclick="toggleAdmin()"></div>
+    <div id="admin-panel" class="fixed top-0 right-0 w-full max-w-2xl h-full bg-ui-900 shadow-2xl z-[60] panel-transition translate-x-full overflow-y-auto p-8 border-l border-brand-600/30 text-brand-400">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold text-brand-500">Painel de Controle</h2>
+            <div class="flex gap-4">
+                <button onclick="logoutAdmin()" class="text-red-500 text-xs font-bold uppercase flex items-center gap-2 bg-ui-800 px-3 py-1 rounded-full border border-red-500/20 hover:bg-red-500/10"><i class="fas fa-power-off"></i> Sair</button>
+                <button onclick="toggleAdmin()" class="text-brand-400 hover:text-brand-500 transition-colors"><i class="fas fa-times text-2xl"></i></button>
+            </div>
+        </div>
+
+        <div class="flex border-b border-brand-600/30 mb-6 overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('sections')" class="tab-btn whitespace-nowrap px-4 py-2 border-b-2 border-brand-500 font-bold text-brand-500">Seções</button>
+            <button onclick="switchTab('banners')" class="tab-btn whitespace-nowrap px-4 py-2 text-brand-600/70">Banners</button>
+            <button onclick="switchTab('products')" class="tab-btn whitespace-nowrap px-4 py-2 text-brand-600/70">Produtos</button>
+            <button onclick="switchTab('site')" class="tab-btn whitespace-nowrap px-4 py-2 text-brand-600/70">Site & Efeitos</button>
+        </div>
+
+        <!-- Tab Seções -->
+        <div id="tab-sections" class="tab-content">
+            <div class="bg-ui-800 p-6 rounded-xl mb-6 border border-brand-600/20 shadow-lg">
+                <h3 class="font-bold mb-4 text-brand-500">Nova Seção</h3>
+                <div class="flex gap-2">
+                    <input type="text" id="section-name" placeholder="Nome da Seção" class="flex-1 bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 outline-none">
+                    <button onclick="createSection()" class="bg-brand-500 text-black px-6 py-3 rounded-xl font-bold hover:bg-brand-400 transition-all">Adicionar</button>
+                </div>
+            </div>
+            <p class="text-[10px] uppercase font-bold text-brand-600 mb-4 px-2">Organize a ordem de exibição:</p>
+            <div id="admin-sections-list" class="space-y-3"></div>
+        </div>
+
+        <!-- Tab Banners -->
+        <div id="tab-banners" class="tab-content hidden">
+            <div class="bg-ui-800 p-6 rounded-xl mb-6 border border-brand-600/20 shadow-lg">
+                <h3 class="font-bold mb-4 text-brand-500">Novo Banner (1920x340)</h3>
+                <input type="text" id="banner-url" placeholder="URL da Imagem" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-3 text-brand-400 outline-none">
+                <input type="text" id="banner-link" placeholder="Link (Opcional)" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-3 text-brand-400 outline-none">
+                <select id="banner-section" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-4 text-brand-400 outline-none"></select>
+                <button onclick="addBanner()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold hover:bg-brand-400 transition-all">Salvar Banner</button>
+            </div>
+            <div id="admin-banners-list" class="grid grid-cols-1 gap-4"></div>
+        </div>
+
+        <!-- Tab Produtos -->
+        <div id="tab-products" class="tab-content hidden">
+            <div class="bg-ui-800 p-6 rounded-xl mb-6 border border-brand-600/20 shadow-lg">
+                <h3 class="font-bold mb-4 text-brand-500">Novo Produto</h3>
+                <input type="text" id="prod-name" placeholder="Nome" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-3 text-brand-400 outline-none">
+                <input type="number" id="prod-price" placeholder="Preço (R$)" step="0.01" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-3 text-brand-400 outline-none">
+                <textarea id="prod-desc" placeholder="Descrição" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-3 text-brand-400 outline-none" rows="3"></textarea>
+                <select id="prod-section" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl mb-4 text-brand-400 outline-none"></select>
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 outline-none" placeholder="Foto 1">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 outline-none" placeholder="Foto 2">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 outline-none" placeholder="Foto 3">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 outline-none" placeholder="Foto 4">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 outline-none" placeholder="Foto 5">
+                    <input type="text" class="prod-img w-full bg-ui-900 border border-brand-600/30 p-2 rounded-lg text-brand-400 outline-none" placeholder="Foto 6">
+                </div>
+                <button onclick="addProduct()" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold hover:bg-brand-400 transition-all">Cadastrar Produto</button>
+            </div>
+            <div id="admin-products-list" class="space-y-4"></div>
+        </div>
+
+        <!-- Tab Site & Efeitos -->
+        <div id="tab-site" class="tab-content hidden">
+            <div class="bg-ui-800 p-6 rounded-xl border border-brand-600/20 space-y-6 shadow-lg">
+                <h3 class="font-bold text-brand-500 text-xl">Identidade & Experiência</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold uppercase text-brand-600">Nome da Loja</label>
+                        <input type="text" id="set-store-name" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 mt-1 outline-none" placeholder="Ex: Loja do Corvo">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold uppercase text-brand-600">WhatsApp (apenas números)</label>
+                        <input type="text" id="set-whatsapp" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 mt-1 outline-none" placeholder="Ex: 5541999767744">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold uppercase text-brand-600">URL da Logo</label>
+                        <input type="text" id="set-logo" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 mt-1 outline-none" placeholder="Link .png ou .jpg">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold uppercase text-brand-600">URL do Favicon</label>
+                        <input type="text" id="set-favicon" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 mt-1 outline-none" placeholder="Link .ico ou .png">
+                    </div>
+                </div>
+
+                <hr class="border-brand-600/20">
+
+                <div>
+                    <label class="text-xs font-bold uppercase text-brand-600">Tema Ativo & Partículas</label>
+                    <select id="set-theme" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 mt-1 outline-none">
+                        <option value="luxury">Luxury Gold (Cintilação)</option>
+                        <option value="winter">Solstício de Inverno (Neve)</option>
+                        <option value="summer">Solstício de Verão (Vagalumes)</option>
+                        <option value="autumn">Equinócio de Outono (Folhas)</option>
+                        <option value="spring">Equinócio de Primavera (Pétalas)</option>
+                        <option value="christmas">Natal (Neve & Presentes nos Cards)</option>
+                        <option value="newyear">Ano Novo (Fogos de Artifício)</option>
+                        <option value="valentines">Namorados (Corações)</option>
+                        <option value="halloween">Halloween (Abóboras & Mist)</option>
+                    </select>
+                </div>
+
+                <hr class="border-brand-600/20">
+
+                <div>
+                    <label class="text-xs font-bold uppercase text-brand-600">Sobre a Loja (Rodapé)</label>
+                    <textarea id="set-about" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 mt-1 outline-none" rows="3" placeholder="Conte sua história..."></textarea>
+                </div>
+
+                <div>
+                    <label class="text-xs font-bold uppercase text-brand-600">Comunicado (Letreiro)</label>
+                    <textarea id="set-ticker" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 mt-1 outline-none" rows="2"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-xs font-bold uppercase text-brand-600">Badge Topo</label>
+                        <input type="text" id="set-delivery" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 mt-1 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold uppercase text-brand-600">Ícone Badge</label>
+                        <input type="text" id="set-delivery-icon" class="w-full bg-ui-900 border border-brand-600/30 p-3 rounded-xl text-brand-400 mt-1 outline-none">
+                    </div>
+                </div>
+
+                <hr class="border-brand-600/20">
+                <h3 class="font-bold text-brand-500 text-sm">Cards de Confiança</h3>
+                <div id="admin-badges-edit" class="space-y-4"></div>
+
+                <button onclick="saveSiteSettings()" class="w-full bg-brand-500 text-black py-4 rounded-xl font-bold mt-4 shadow-xl hover:bg-brand-400 transition-all">SALVAR TUDO E APLICAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="fixed inset-0 bg-black/80 z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-ui-800 max-w-5xl w-full max-h-[90vh] overflow-y-auto rounded-2xl relative p-6 md:p-10 border border-brand-600/30 shadow-2xl">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 text-brand-400 hover:text-brand-500 z-10 bg-black/50 p-2 rounded-full"><i class="fas fa-times text-2xl"></i></button>
+            <div id="modal-content" class="grid md:grid-cols-2 gap-10"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK & App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, where, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDI2KpH9QFlEyd6cLtybWx1MBhsI8K204o",
+            authDomain: "loja2-c1305.firebaseapp.com",
+            projectId: "loja2-c1305",
+            storageBucket: "loja2-c1305.firebasestorage.app",
+            messagingSenderId: "916190908547",
+            appId: "1:916190908547:web:4c882c1439aea9180bcbb6"
+        };
+
+        const appFirebase = initializeApp(firebaseConfig);
+        const auth = getAuth(appFirebase);
+        const db = getFirestore(appFirebase);
+        const appId = "loja-do-corvo-final-v2"; 
+
+        const themes = {
+            luxury: { brand400: "#e5c07b", brand500: "#d4af37", brand600: "#b5942f", bgMain: "#111111", bgCard: "#1a1a1a", textOnBrand: "#000000", particleType: 'dust', decoration: "✨" },
+            winter: { brand400: "#a5f3fc", brand500: "#22d3ee", brand600: "#0891b2", bgMain: "#0f172a", bgCard: "#1e293b", textOnBrand: "#000000", particleType: 'snow', decoration: "❄️" },
+            summer: { brand400: "#fef08a", brand500: "#facc15", brand600: "#ca8a04", bgMain: "#2d1a01", bgCard: "#3d2b08", textOnBrand: "#000000", particleType: 'fireflies', decoration: "☀️" },
+            autumn: { brand400: "#fdba74", brand500: "#f97316", brand600: "#c2410c", bgMain: "#1c0f0e", bgCard: "#2a1816", textOnBrand: "#000000", particleType: 'leaves', decoration: "🍂" },
+            spring: { brand400: "#bcf4c6", brand500: "#4ade80", brand600: "#16a34a", bgMain: "#0f1c11", bgCard: "#162a1a", textOnBrand: "#000000", particleType: 'petals', decoration: "🌸" },
+            christmas: { brand400: "#fca5a5", brand500: "#ef4444", brand600: "#dc2626", bgMain: "#062216", bgCard: "#0b3d27", textOnBrand: "#ffffff", particleType: 'snow', decoration: "🎁" },
+            newyear: { brand400: "#ffffff", brand500: "#d4af37", brand600: "#a1a1aa", bgMain: "#09090b", bgCard: "#18181b", textOnBrand: "#000000", particleType: 'fireworks', decoration: "🎆" },
+            valentines: { brand400: "#f9a8d4", brand500: "#f43f5e", brand600: "#be123c", bgMain: "#1a0105", bgCard: "#2b080e", textOnBrand: "#ffffff", particleType: 'hearts', decoration: "❤️" },
+            halloween: { brand400: "#fb923c", brand500: "#ea580c", brand600: "#7c2d12", bgMain: "#090909", bgCard: "#1a1a1a", textOnBrand: "#000000", particleType: 'pumpkins', decoration: "🎃" }
+        };
+
+        let currentUser = null;
+        let isAdmin = false;
+        let sections = [];
+        let banners = [];
+        let products = [];
+        let cart = [];
+        let currentFilter = 'all';
+        let siteSettings = {
+            theme: "luxury",
+            storeName: "Loja do Corvo",
+            whatsappNumber: "5541999767744",
+            logoUrl: "https://i.ibb.co/zVr3Fk0c/logo.png",
+            faviconUrl: "https://i.ibb.co/zVr3Fk0c/logo.png",
+            tickerText: "Bem-vindo à Loja do Corvo - Exclusividade.",
+            aboutText: "A Loja do Corvo nasceu da paixão pela exclusividade e pelo luxo.",
+            deliveryText: "ENTREGA VIP EM CURITIBA",
+            deliveryIcon: "fas fa-truck-fast",
+            footerText: "© 2024 Loja do Corvo.",
+            badges: [
+                { id: 1, icon: "fas fa-shield-alt", title: "Compra Segura", desc: "Proteção Total" },
+                { id: 2, icon: "fas fa-gem", title: "Exclusividade", desc: "Peças Únicas" },
+                { id: 3, icon: "fas fa-shipping-fast", title: "Entrega Premium", desc: "Curitiba e Região" },
+                { id: 4, icon: "fas fa-crown", title: "Atendimento VIP", desc: "Concierge Digital" }
+            ]
+        };
+
+        const ADMIN_EMAIL = 'admin@corvo.com';
+
+        // Particle Engine
+        const canvas = document.getElementById('effects-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); }
+
+        class Particle {
+            constructor(type, color) { this.type = type; this.color = color; this.init(); }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 4 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 + 1;
+                this.opacity = Math.random() * 0.6 + 0.2;
+                this.angle = Math.random() * Math.PI * 2;
+                this.spin = Math.random() * 0.1 - 0.05;
+                this.isExplosion = false;
+                this.velocity = { x: Math.random() * 4 - 2, y: Math.random() * 4 - 2 };
+            }
+            update() {
+                if (this.type === 'snow' || this.type === 'mist') { this.y += this.speedY * 0.5; this.x += Math.sin(this.angle) * 0.5; }
+                else if (this.type === 'fireflies') { this.x += this.speedX * 0.5; this.y += this.speedY * -0.5; this.opacity = Math.abs(Math.sin(this.angle)) * 0.6; }
+                else if (this.type === 'hearts' || this.type === 'petals' || this.type === 'leaves') { this.y += this.speedY * 0.4; this.angle += this.spin; this.x += Math.sin(this.angle) * 1; }
+                else if (this.type === 'pumpkins') { this.y += this.speedY * 0.3; this.angle += this.spin * 0.5; }
+                else if (this.type === 'fireworks') {
+                    if (!this.isExplosion) { this.y -= 4; if (Math.random() < 0.02 || this.y < 100) this.explode(); }
+                    else { this.x += this.velocity.x; this.y += this.velocity.y; this.velocity.y += 0.05; this.opacity -= 0.01; }
+                } else { this.y += this.speedY * 0.2; this.x += this.speedX * 0.2; }
+                if (this.y > canvas.height + 20) { if (this.type === 'fireworks' && this.isExplosion) this.init(); else this.y = -20; }
+                if (this.x > canvas.width + 20) this.x = -10;
+                if (this.x < -20) this.x = canvas.width;
+                this.angle += 0.02;
+            }
+            explode() { this.isExplosion = true; this.velocity = { x: (Math.random() - 0.5) * 8, y: (Math.random() - 0.5) * 8 }; this.color = `hsl(${Math.random() * 360}, 100%, 70%)`; }
+            draw() {
+                ctx.globalAlpha = this.opacity; ctx.fillStyle = this.color;
+                if (this.type === 'hearts') { ctx.font = `${this.size * 5}px Arial`; ctx.fillText('❤️', this.x, this.y); }
+                else if (this.type === 'pumpkins') { ctx.font = `${this.size * 6}px Arial`; ctx.fillText('🎃', this.x, this.y); }
+                else if (this.type === 'presents') { ctx.font = `${this.size * 5}px Arial`; ctx.fillText('🎁', this.x, this.y); }
+                else if (this.type === 'leaves') { ctx.font = `${this.size * 5}px Arial`; ctx.fillText('🍂', this.x, this.y); }
+                else if (this.type === 'petals') { ctx.font = `${this.size * 5}px Arial`; ctx.fillText('🌸', this.x, this.y); }
+                else if (this.type === 'fireworks') { ctx.beginPath(); ctx.arc(this.x, this.y, this.isExplosion ? this.size : 2, 0, Math.PI * 2); ctx.fill(); }
+                else { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const type = themes[siteSettings.theme]?.particleType || 'dust';
+            const color = themes[siteSettings.theme]?.brand400 || '#d4af37';
+            const count = Math.min(window.innerWidth / 12, 100);
+            for (let i = 0; i < count; i++) particles.push(new Particle(type, color));
+        }
+
+        function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); animationId = requestAnimationFrame(animateParticles); }
+
+        async function initApp() {
+            window.addEventListener('resize', resizeCanvas); resizeCanvas(); animateParticles();
+            onAuthStateChanged(auth, (user) => {
+                currentUser = user; isAdmin = user && user.email === ADMIN_EMAIL;
+                updateAdminButton(); if (user) loadData(); else signInAnonymously(auth).catch(console.error);
+            });
+            setInterval(() => {
+                const carousels = document.querySelectorAll('.carousel-container');
+                carousels.forEach(c => {
+                    if (c.children.length > 1) {
+                        const width = c.offsetWidth;
+                        if (c.scrollLeft >= c.scrollWidth - width - 5) c.scrollTo({left: 0, behavior: 'smooth'});
+                        else c.scrollBy({left: width, behavior: 'smooth'});
+                    }
+                });
+            }, 6000);
+        }
+
+        function updateAdminButton() {
+            const btn = document.getElementById('admin-btn');
+            if (isAdmin) { btn.innerHTML = '<i class="fas fa-crown text-xl text-brand-500 animate-pulse"></i>'; btn.onclick = toggleAdmin; }
+            else { btn.innerHTML = '<i class="fas fa-user-shield text-xl"></i>'; btn.onclick = openLoginModal; }
+        }
+
+        window.handleAdminClick = () => isAdmin ? toggleAdmin() : openLoginModal();
+        window.openLoginModal = () => document.getElementById('login-modal').classList.remove('hidden');
+        window.closeLoginModal = () => document.getElementById('login-modal').classList.add('hidden');
+
+        window.loginAdmin = async () => {
+            const e = document.getElementById('admin-email').value.trim();
+            const p = document.getElementById('admin-password').value;
+            try { await signInWithEmailAndPassword(auth, e, p); closeLoginModal(); showToast("Acesso Mestre! ✨"); toggleAdmin(); }
+            catch (err) { showToast("Credenciais inválidas."); }
+        };
+
+        window.logoutAdmin = async () => {
+            if(!confirm("Encerrar sessão admin?")) return;
+            await signOut(auth); showToast("Sessão encerrada.");
+            if (!document.getElementById('admin-panel').classList.contains('translate-x-full')) toggleAdmin();
+        };
+
+        function loadData() {
+            const publicPath = (coll) => collection(db, 'artifacts', appId, 'public', 'data', coll);
+            onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'config', 'site'), (docSnap) => {
+                if (docSnap.exists()) {
+                    siteSettings = { ...siteSettings, ...docSnap.data() };
+                    applySiteSettings(); initParticles(); 
+                } else applySiteSettings();
+            });
+            onSnapshot(publicPath('sections'), (snap) => { 
+                sections = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); 
+                sections.sort((a, b) => (a.order || 0) - (b.order || 0));
+                renderAdminSections(); renderFilters(); renderStore(); updateSelects(); 
+            });
+            onSnapshot(publicPath('banners'), (snap) => { banners = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderAdminBanners(); renderStore(); });
+            onSnapshot(publicPath('products'), (snap) => { products = snap.docs.map(doc => ({ id: doc.id, ...doc.data() })); renderAdminProducts(); renderStore(); });
+        }
+
+        function applySiteSettings() {
+            const t = themes[siteSettings.theme] || themes.luxury;
+            const root = document.documentElement;
+            root.style.setProperty('--brand-400', t.brand400);
+            root.style.setProperty('--brand-500', t.brand500);
+            root.style.setProperty('--brand-600', t.brand600);
+            root.style.setProperty('--bg-main', t.bgMain);
+            root.style.setProperty('--bg-card', t.bgCard);
+            root.style.setProperty('--text-on-brand', t.textOnBrand);
+            root.style.setProperty('--theme-decoration', `"${t.decoration}"`);
+
+            const sName = siteSettings.storeName || "Loja do Corvo";
+            const wNum = siteSettings.whatsappNumber || "5541999767744";
+            
+            document.getElementById('page-title').innerText = `${sName} - Luxury Ecommerce`;
+            document.getElementById('store-name-nav').innerText = sName;
+            document.getElementById('footer-copyright').innerText = `© 2024 ${sName}. Todos os direitos reservados.`;
+            document.getElementById('footer-phone-display').innerText = wNum.length > 10 ? `(${wNum.substring(2,4)}) ${wNum.substring(4,9)}-${wNum.substring(9)}` : wNum;
+
+            // WhatsApp Links
+            const waUrl = `https://wa.me/${wNum}`;
+            document.getElementById('whatsapp-floating-btn').href = waUrl;
+            document.getElementById('footer-whatsapp-support').href = waUrl;
+            document.getElementById('footer-whatsapp-icon').href = waUrl;
+
+            document.getElementById('logo-nav').src = siteSettings.logoUrl || "https://i.ibb.co/zVr3Fk0c/logo.png";
+            document.getElementById('logo-footer').src = siteSettings.logoUrl || "https://i.ibb.co/zVr3Fk0c/logo.png";
+            document.getElementById('site-favicon').href = siteSettings.faviconUrl || siteSettings.logoUrl || "https://i.ibb.co/zVr3Fk0c/logo.png";
+
+            document.getElementById('site-ticker').innerText = (siteSettings.tickerText + " • ").repeat(3);
+            document.getElementById('top-delivery-badge').innerHTML = `<i class="${siteSettings.deliveryIcon || 'fas fa-truck-fast'}"></i> ${siteSettings.deliveryText}`;
+            document.getElementById('footer-about').innerText = siteSettings.aboutText;
+            
+            document.getElementById('badges-container').innerHTML = siteSettings.badges.map(b => `
+                <div class="flex items-center gap-4 p-5 bg-ui-800 rounded-xl shadow-lg border border-brand-600/20 backdrop-blur-sm relative overflow-hidden group">
+                    <div class="absolute -right-2 -bottom-2 text-4xl opacity-5 transition-transform group-hover:scale-150">${t.decoration}</div>
+                    <i class="${b.icon} text-brand-500 text-3xl"></i>
+                    <div class="relative z-10"><p class="text-sm font-bold text-brand-400">${b.title}</p><p class="text-xs text-gold-600/60">${b.desc}</p></div>
+                </div>
+            `).join('');
+
+            if (isAdmin) {
+                document.getElementById('set-store-name').value = sName;
+                document.getElementById('set-whatsapp').value = wNum;
+                document.getElementById('set-logo').value = siteSettings.logoUrl || "";
+                document.getElementById('set-favicon').value = siteSettings.faviconUrl || "";
+                document.getElementById('set-theme').value = siteSettings.theme;
+                document.getElementById('set-about').value = siteSettings.aboutText;
+                document.getElementById('set-ticker').value = siteSettings.tickerText;
+                document.getElementById('set-delivery').value = siteSettings.deliveryText;
+                document.getElementById('set-delivery-icon').value = siteSettings.deliveryIcon;
+                document.getElementById('admin-badges-edit').innerHTML = siteSettings.badges.map((b, i) => `
+                    <div class="bg-ui-900/50 p-4 rounded-xl border border-brand-600/10 space-y-2">
+                        <input type="text" value="${b.icon}" data-index="${i}" data-field="icon" class="badge-input bg-ui-800 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-xs w-full outline-none">
+                        <div class="grid grid-cols-2 gap-2">
+                             <input type="text" value="${b.title}" data-index="${i}" data-field="title" class="badge-input bg-ui-800 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-xs outline-none">
+                             <input type="text" value="${b.desc}" data-index="${i}" data-field="desc" class="badge-input bg-ui-800 border border-brand-600/30 p-2 rounded-lg text-brand-400 text-xs outline-none">
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        window.saveSiteSettings = async () => {
+            if (!isAdmin) return;
+            const b = [];
+            for(let i=0; i<4; i++) {
+                b.push({
+                    id: i+1,
+                    icon: document.querySelector(`.badge-input[data-index="${i}"][data-field="icon"]`).value,
+                    title: document.querySelector(`.badge-input[data-index="${i}"][data-field="title"]`).value,
+                    desc: document.querySelector(`.badge-input[data-index="${i}"][data-field="desc"]`).value
+                });
+            }
+            const data = { 
+                storeName: document.getElementById('set-store-name').value.trim(),
+                whatsappNumber: document.getElementById('set-whatsapp').value.trim(),
+                logoUrl: document.getElementById('set-logo').value,
+                faviconUrl: document.getElementById('set-favicon').value,
+                theme: document.getElementById('set-theme').value, 
+                aboutText: document.getElementById('set-about').value,
+                tickerText: document.getElementById('set-ticker').value, 
+                deliveryText: document.getElementById('set-delivery').value, 
+                deliveryIcon: document.getElementById('set-delivery-icon').value, 
+                badges: b 
+            };
+            try { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'config', 'site'), data); showToast("Configurações atualizadas! ✨"); }
+            catch(e) { showToast("Erro ao salvar."); }
+        };
+
+        window.scrollCarousel = (id, dir) => { const c = document.getElementById(id); c.scrollBy({left: c.offsetWidth * dir, behavior: 'smooth'}); };
+        function formatCurrency(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
+        function renderBannerItem(b) { const content = `<img src="${b.url}" class="w-full banner-aspect" alt="Banner">`; return b.link ? `<a href="${b.link}" target="_blank" class="block w-full">${content}</a>` : content; }
+
+        function renderCarousel(bannersList, containerId, navId) {
+            if (bannersList.length === 0) return `<div class="w-full banner-aspect bg-ui-900 flex items-center justify-center text-brand-600/50 font-bold uppercase tracking-tighter">Vitrine Premium</div>`;
+            if (bannersList.length === 1) return renderBannerItem(bannersList[0]);
+            const carouselId = `carousel-${containerId}`;
+            const slides = bannersList.map((b, idx) => `<div class="carousel-item" id="${carouselId}-slide-${idx}">${renderBannerItem(b)}</div>`).join('');
+            const dots = bannersList.map((_, idx) => `<button onclick="document.getElementById('${carouselId}').scrollTo({left: document.getElementById('${carouselId}').offsetWidth * ${idx}, behavior: 'smooth'})" class="w-2 h-2 rounded-full bg-brand-600/30 hover:bg-brand-500 transition-all"></button>`).join('');
+            if (navId) document.getElementById(navId).innerHTML = dots;
+            return `<div class="relative group/local"><div id="${carouselId}" class="carousel-container">${slides}</div><button onclick="scrollCarousel('${carouselId}', -1)" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-brand-500 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover/local:opacity-100 z-10 transition-opacity"><i class="fas fa-chevron-left text-xs"></i></button><button onclick="scrollCarousel('${carouselId}', 1)" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-brand-500 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover/local:opacity-100 z-10 transition-opacity"><i class="fas fa-chevron-right text-xs"></i></button></div>`;
+        }
+
+        window.setFilter = (filter) => { currentFilter = filter; renderFilters(); renderStore(); window.scrollTo({ top: document.getElementById('store-content').offsetTop - 150, behavior: 'smooth' }); };
+        function renderFilters() { const bar = document.getElementById('filter-bar'); let h = `<button onclick="setFilter('all')" class="${currentFilter === 'all' ? 'bg-brand-500 text-black shadow-lg' : 'bg-ui-800 text-brand-400 border border-brand-600/20'} px-6 py-2 rounded-full font-bold text-xs uppercase tracking-widest whitespace-nowrap transition-all">Ver Tudo</button>`; sections.forEach(s => { const active = currentFilter === s.id; h += `<button onclick="setFilter('${s.id}')" class="${active ? 'bg-brand-500 text-black shadow-lg' : 'bg-ui-800 text-brand-400 border border-brand-600/20 hover:border-brand-500/50'} px-6 py-2 rounded-full font-bold text-xs uppercase tracking-widest whitespace-nowrap transition-all">${s.name}</button>`; }); bar.innerHTML = h; }
+
+        function renderStore() {
+            const content = document.getElementById('store-content');
+            document.getElementById('main-banners').innerHTML = renderCarousel(banners.filter(b => b.sectionId === 'header'), 'header-main', 'main-banners-nav');
+            if (sections.length === 0) { content.innerHTML = `<div class="text-center py-32 text-brand-600/50"><p>Carregando Coleções...</p></div>`; return; }
+            let h = '';
+            sections.forEach(section => {
+                if (currentFilter !== 'all' && section.id !== currentFilter) return;
+                const sp = products.filter(p => p.sectionId === section.id);
+                const sb = banners.filter(b => b.sectionId === section.id);
+                if (sp.length === 0 && sb.length === 0) return;
+                h += `
+                    <div class="mt-16 animate-in fade-in duration-700">
+                        <div class="mb-10">${sb.length > 0 ? renderCarousel(sb, `section-${section.id}`, null) : ''}</div>
+                        <div class="flex items-center justify-between mb-10 sticky top-40 md:top-36 z-20 bg-ui-900/80 backdrop-blur-md py-4 border-b border-brand-600/20">
+                            <h2 class="text-3xl font-bold text-brand-500 uppercase tracking-tighter">${section.name}</h2>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            ${sp.map(p => `
+                                <div class="product-card group bg-ui-800/60 backdrop-blur-sm rounded-2xl overflow-hidden border border-brand-600/20 shadow-lg relative hover:border-brand-500/50 transition-all duration-500">
+                                    <div class="aspect-[4/5] bg-ui-900 relative overflow-hidden">
+                                        <img src="${p.images[0]}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                        <div class="product-actions absolute inset-0 bg-black/40 opacity-0 flex flex-col items-center justify-end p-6 transition-opacity">
+                                            <button onclick="viewProduct('${p.id}')" class="w-full bg-brand-500 text-black py-3 rounded-xl font-bold text-sm shadow-lg">Ver Detalhes</button>
+                                        </div>
+                                        <button onclick="addToCart('${p.id}')" class="absolute top-4 right-4 bg-brand-500 text-black p-3 rounded-full shadow-lg hover:scale-110 transition-transform z-10"><i class="fas fa-shopping-bag"></i></button>
+                                    </div>
+                                    <div class="p-6">
+                                        <h3 class="font-bold text-lg mb-2 text-brand-400 line-clamp-1">${p.name}</h3>
+                                        <span class="text-2xl font-black text-brand-500">${formatCurrency(p.price)}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            content.innerHTML = h || `<div class="text-center py-32 text-brand-600/50"><p>Nenhum item encontrado.</p></div>`;
+        }
+
+        window.viewProduct = (id) => {
+            const p = products.find(prod => prod.id === id);
+            if (!p) return;
+            document.getElementById('modal-content').innerHTML = `
+                <div class="space-y-6">
+                    <img id="main-modal-img" src="${p.images[0]}" class="w-full aspect-[4/5] object-cover rounded-2xl border border-brand-600/20 shadow-2xl">
+                    <div class="grid grid-cols-6 gap-3">
+                        ${p.images.map(img => `<img src="${img}" onclick="document.getElementById('main-modal-img').src='${img}'" class="aspect-square object-cover rounded-xl cursor-pointer border border-brand-600/20 hover:border-brand-500 transition-all">`).join('')}
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center">
+                    <h2 class="text-4xl font-black mb-4 text-brand-500 leading-tight">${p.name}</h2>
+                    <span class="text-3xl font-black text-brand-400 mb-8">${formatCurrency(p.price)}</span>
+                    <p class="text-brand-600/80 leading-relaxed mb-10 text-sm">${p.description}</p>
+                    <button onclick="addToCart('${p.id}'); closeProductModal();" class="w-full bg-brand-500 text-black py-5 rounded-xl font-bold text-lg shadow-lg hover:bg-brand-400 transition-all">ADICIONAR À SACOLA</button>
+                </div>
+            `;
+            document.getElementById('product-modal').classList.remove('hidden');
+        };
+
+        window.closeProductModal = () => document.getElementById('product-modal').classList.add('hidden');
+        window.addToCart = (id) => { const p = products.find(prod => prod.id === id); if (p) { cart.push(p); updateCartUI(); showToast("Adicionado à sacola! ✨"); } };
+        window.removeFromCart = (idx) => { cart.splice(idx, 1); updateCartUI(); renderCartItems(); };
+        function updateCartUI() { document.getElementById('cart-count').innerText = cart.length; document.getElementById('cart-total').innerText = formatCurrency(cart.reduce((s, i) => s + (Number(i.price) || 0), 0)); }
+
+        window.toggleCart = () => {
+            const o = document.getElementById('cart-overlay');
+            const p = document.getElementById('cart-panel');
+            if (o.classList.contains('hidden')) { o.classList.remove('hidden'); renderCartItems(); setTimeout(() => { o.classList.remove('opacity-0'); p.classList.remove('translate-x-full'); }, 10); }
+            else { o.classList.add('opacity-0'); p.classList.add('translate-x-full'); setTimeout(() => o.classList.add('hidden'), 300); }
+        };
+
+        function renderCartItems() {
+            const c = document.getElementById('cart-items');
+            if (cart.length === 0) { c.innerHTML = `<p class="text-center text-brand-600/50 py-10">Sua sacola está vazia.</p>`; return; }
+            c.innerHTML = cart.map((i, idx) => `
+                <div class="flex gap-4 bg-ui-800 p-4 rounded-xl border border-brand-600/20 relative backdrop-blur-md">
+                    <img src="${i.images[0]}" class="w-16 h-20 object-cover rounded-lg">
+                    <div class="flex-1"><h4 class="font-bold text-brand-400 text-sm">${i.name}</h4><p class="text-brand-500 font-bold text-xs">${formatCurrency(i.price)}</p></div>
+                    <button onclick="removeFromCart(${idx})" class="absolute top-2 right-2 text-brand-600/50 hover:text-red-500 transition-colors"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `).join('');
+        }
+
+        window.checkoutWhatsApp = () => {
+            if (cart.length === 0) return showToast("Sacola vazia.");
+            const wNum = siteSettings.whatsappNumber || "5541999767744";
+            let m = "*Olá!* Gostaria de fechar o pedido dos seguintes itens:\n";
+            cart.forEach(i => m += `- ${i.name} (${formatCurrency(i.price)})\n`);
+            m += `\n*Total Estimado: ${document.getElementById('cart-total').innerText}*`;
+            window.open(`https://wa.me/${wNum}?text=${encodeURIComponent(m)}`, '_blank');
+        };
+
+        window.moveSection = async (id, dir) => {
+            const index = sections.findIndex(s => s.id === id);
+            if ((dir === -1 && index === 0) || (dir === 1 && index === sections.length - 1)) return;
+            const targetIndex = index + dir;
+            const currentSec = sections[index];
+            const targetSec = sections[targetIndex];
+            try {
+                const to = currentSec.order || index; const no = targetSec.order || targetIndex;
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sections', currentSec.id), { order: no });
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sections', targetSec.id), { order: to });
+                showToast("Ordem atualizada! ✨");
+            } catch (e) { showToast("Erro ao ordenar."); }
+        };
+
+        function renderAdminSections() { 
+            document.getElementById('admin-sections-list').innerHTML = sections.map((s, idx) => `
+                <div class="flex justify-between items-center p-4 bg-ui-900 border border-brand-600/20 rounded-xl shadow-sm group">
+                    <div class="flex items-center gap-4">
+                        <div class="flex flex-col gap-1">
+                            <button onclick="moveSection('${s.id}', -1)" class="text-brand-600 hover:text-brand-400 p-1 ${idx === 0 ? 'opacity-0 pointer-events-none' : ''}"><i class="fas fa-chevron-up"></i></button>
+                            <button onclick="moveSection('${s.id}', 1)" class="text-brand-600 hover:text-brand-400 p-1 ${idx === sections.length-1 ? 'opacity-0 pointer-events-none' : ''}"><i class="fas fa-chevron-down"></i></button>
+                        </div>
+                        <span class="font-bold text-sm text-brand-400">${s.name}</span>
+                    </div>
+                    <button onclick="deleteDocById('sections', '${s.id}')" class="text-red-500 hover:text-red-400 p-2"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join(''); 
+        }
+
+        function renderAdminBanners() { document.getElementById('admin-banners-list').innerHTML = banners.map(b => `<div class="bg-ui-900 border border-brand-600/20 rounded-xl p-2 group"><img src="${b.url}" class="h-16 w-full object-cover rounded mb-2 grayscale group-hover:grayscale-0 transition-all"><div class="flex justify-between text-[10px] uppercase font-black text-brand-600"><span>${b.sectionId === 'header' ? 'Topo' : sections.find(s => s.id === b.sectionId)?.name}</span><button onclick="deleteDocById('banners', '${b.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div></div>`).join(''); }
+        function renderAdminProducts() { document.getElementById('admin-products-list').innerHTML = products.map(p => `<div class="flex gap-4 bg-ui-900 border border-brand-600/20 rounded-xl p-3 items-center shadow-sm"><img src="${p.images[0]}" class="h-10 w-10 object-cover rounded"><div class="flex-1"><h4 class="font-bold text-xs text-brand-400">${p.name}</h4></div><button onclick="deleteDocById('products', '${p.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></div>`).join(''); }
+        function updateSelects() { const opts = `<option value="header">Topo</option>` + sections.map(s => `<option value="${s.id}">${s.name}</option>`).join(''); document.getElementById('banner-section').innerHTML = opts; document.getElementById('prod-section').innerHTML = sections.map(s => `<option value="${s.id}">${s.name}</option>`).join(''); }
+
+        window.createSection = async () => { const n = document.getElementById('section-name').value.trim(); if (n) { const o = sections.length > 0 ? (sections[sections.length-1].order || sections.length) + 1 : 0; await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sections'), { name: n, order: o }); document.getElementById('section-name').value = ''; } };
+        window.addBanner = async () => { const u = document.getElementById('banner-url').value.trim(); const l = document.getElementById('banner-link').value.trim(); const s = document.getElementById('banner-section').value; if (u) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'banners'), { url: u, link: l, sectionId: s }); document.getElementById('banner-url').value = ''; document.getElementById('banner-link').value = ''; };
+        window.addProduct = async () => { const n = document.getElementById('prod-name').value.trim(); const p = parseFloat(document.getElementById('prod-price').value); const d = document.getElementById('prod-desc').value.trim(); const s = document.getElementById('prod-section').value; const i = Array.from(document.querySelectorAll('.prod-img')).map(el => el.value.trim()).filter(v => v !== ""); if (n && !isNaN(p) && i.length > 0) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'products'), { name: n, price: p, description: d, sectionId: s, images: i }); document.getElementById('prod-name').value = ''; document.getElementById('prod-price').value = ''; document.querySelectorAll('.prod-img').forEach(el => el.value = ''); } };
+        window.deleteDocById = async (c, id) => { if (confirm("Remover?")) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', c, id)); };
+
+        window.toggleAdmin = () => { const o = document.getElementById('admin-overlay'); const p = document.getElementById('admin-panel'); if (o.classList.contains('hidden')) { o.classList.remove('hidden'); setTimeout(() => p.classList.remove('translate-x-full'), 10); } else { p.classList.add('translate-x-full'); setTimeout(() => o.classList.add('hidden'), 300); } };
+        window.switchTab = (tab) => { document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden')); document.getElementById(`tab-${tab}`).classList.remove('hidden'); document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('border-b-2', 'border-brand-500', 'text-brand-500', 'font-bold'); b.classList.add('text-brand-600/70'); }); const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.innerText.toLowerCase().includes(tab.substring(0,3))); if (btn) { btn.classList.add('border-b-2', 'border-brand-500', 'text-brand-500', 'font-bold'); btn.classList.remove('text-brand-600/70'); } };
+        function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.remove('translate-y-20', 'opacity-0'); setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000); }
+
+        initApp();
+    </script>
+</body>
+</html>
